@@ -81,6 +81,10 @@ export default async function Home() {
     );
   } catch (e) {
     console.error(e);
-    return <div>ERROR</div>;
+    return (
+      <div>
+        {JSON.stringify(e)}
+      </div>
+    )
   }
 }
