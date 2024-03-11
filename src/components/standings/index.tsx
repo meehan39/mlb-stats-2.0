@@ -9,12 +9,14 @@ import {
     Paper,
   } from '@mui/material';
 
-import { LEAGUE_DATA } from "../constants";
+import StandingsRow from "./standingsRow";
 
-import type { TeamKey } from "../app/types";
-import type { ResponseData, TotalHomeRuns } from "../app/api/totals/types";
+import { LEAGUE_DATA } from "../../constants";
 
-interface TRow {
+import type { TeamKey } from "../../app/types";
+import type { ResponseData, TotalHomeRuns } from "../../app/api/totals/types";
+
+export interface TRow {
     teamKey: string;
     teamName: string;
     topFour: number;
@@ -54,19 +56,10 @@ export default async function Standings() {
                   </TableRow>
               </TableHead>
               <TableBody>
-                  {rows.map((row) => (
-                    <TableRow
-                      key={row.teamKey}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                      hover={true}
-                    >
-                      <TableCell component="th" scope="row">
-                        <a href={`/team/${row.teamKey}`}>{row.teamName}</a>
-                      </TableCell>
-                      <TableCell align="right">{row.topFour}</TableCell>
-                      <TableCell align="right">{row.total}</TableCell>
-                    </TableRow>
-                  ))}
+                  {rows.map((row) => {
+                    const { teamKey, teamName, topFour, total } = row;
+                    return <StandingsRow key={teamKey} teamKey={teamKey} teamName={teamName} topFour={topFour} total={total}/>
+})}
               </TableBody>
             </Table>
         </TableContainer>
