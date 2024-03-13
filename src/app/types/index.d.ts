@@ -9,18 +9,18 @@ export interface Team {
 }
 
 export enum TeamKey {
-    MATT = "matt",
-    ALEX_SAP = "alexSap",
-    MAIDA = "maida",
-    LINARDOS = "linardos",
-    DYLAN = "dylan",
-    TONY = "tony",
-    MIKE = "mike",
-    JV = "jv",
-    CROG = "crog",
-    NICO = "nico",
-    MEEHAN = "meehan",
-    VERDI = "verdi"
+    MATT = 'matt',
+    ALEX_SAP = 'alexSap',
+    MAIDA = 'maida',
+    LINARDOS = 'linardos',
+    DYLAN = 'dylan',
+    TONY = 'tony',
+    MIKE = 'mike',
+    JV = 'jv',
+    CROG = 'crog',
+    NICO = 'nico',
+    MEEHAN = 'meehan',
+    VERDI = 'verdi',
 }
 
 export interface LeagueData {
@@ -36,5 +36,4 @@ export interface LeagueData {
     [TeamKey.NICO]: Team;
     [TeamKey.MEEHAN]: Team;
     [TeamKey.VERDI]: Team;
-
 }

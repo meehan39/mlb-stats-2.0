@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import {
     Table,
     TableBody,
@@ -7,14 +7,14 @@ import {
     TableHead,
     TableRow,
     Paper,
-  } from '@mui/material';
+} from '@mui/material';
 
-import StandingsRow from "./standingsRow";
+import StandingsRow from './standingsRow';
 
-import { LEAGUE_DATA } from "../../constants";
+import { LEAGUE_DATA } from '../../constants';
 
-import type { TeamKey } from "../../app/types";
-import type { ResponseData, TotalHomeRuns } from "../../app/api/totals/types";
+import type { TeamKey } from '../../app/types';
+import type { ResponseData, TotalHomeRuns } from '../../app/api/totals/types';
 
 export interface TRow {
     teamKey: string;
@@ -35,33 +35,41 @@ export default async function Standings() {
             teamKey,
             teamName: teamData.teamName,
             topFour: teamStats.topFour,
-            total: teamStats.total
-        })
+            total: teamStats.total,
+        });
     }
     rows.sort((a, b) => {
-      if (a.topFour === b.topFour) {
-        return (a.total < b.total) ? 1 : -1
-      } else {
-        return (a.topFour < b.topFour) ? 1 : -1
-      }
-    })
+        if (a.topFour === b.topFour) {
+            return a.total < b.total ? 1 : -1;
+        } else {
+            return a.topFour < b.topFour ? 1 : -1;
+        }
+    });
     return (
         <TableContainer component={Paper}>
-          <Table>
-              <TableHead>
-                  <TableRow>
-                      <TableCell>Team</TableCell>
-                      <TableCell align="right">Top 4 HRs</TableCell>
-                      <TableCell align="right">Total HRs</TableCell>
-                  </TableRow>
-              </TableHead>
-              <TableBody>
-                  {rows.map((row) => {
-                    const { teamKey, teamName, topFour, total } = row;
-                    return <StandingsRow key={teamKey} teamKey={teamKey} teamName={teamName} topFour={topFour} total={total}/>
-})}
-              </TableBody>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Team</TableCell>
+                        <TableCell align='right'>Top 4 HRs</TableCell>
+                        <TableCell align='right'>Total HRs</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map(row => {
+                        const { teamKey, teamName, topFour, total } = row;
+                        return (
+                            <StandingsRow
+                                key={teamKey}
+                                teamKey={teamKey}
+                                teamName={teamName}
+                                topFour={topFour}
+                                total={total}
+                            />
+                        );
+                    })}
+                </TableBody>
             </Table>
         </TableContainer>
-    )
+    );
 }

@@ -1,4 +1,4 @@
-import type { TeamKey } from "../../types"
+import type { TeamKey } from '../../types';
 
 export interface ResponseData {
     [TeamKey.MATT]?: TotalHomeRuns;
