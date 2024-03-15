@@ -13,8 +13,8 @@ import StandingsRow from './standingsRow';
 
 import { LEAGUE_DATA } from '../../constants';
 
-import type { TeamKey } from '../../app/types';
-import type { ResponseData, TotalHomeRuns } from '../../app/api/totals/types';
+import type { TeamKey } from '../../constants/types';
+import type Totals from '../../app/api/totals/types';
 
 export interface TRow {
     teamKey: string;
@@ -25,26 +25,27 @@ export interface TRow {
 
 export default async function Standings() {
     const { BASE_URL } = process.env;
-    const response = await axios.get(`${BASE_URL}/api/totals`);
-    const leagueStats: ResponseData = response.data;
-    const rows: TRow[] = [];
-    for (const teamKey in leagueStats) {
-        const teamData = LEAGUE_DATA[teamKey as TeamKey];
-        const teamStats = leagueStats[teamKey as TeamKey] as TotalHomeRuns;
-        rows.push({
-            teamKey,
-            teamName: teamData.teamName,
-            topFour: teamStats.topFour,
-            total: teamStats.total,
+    const { data } = (await axios.get(
+        `${BASE_URL}/api/totals`,
+    )) as Totals.Response;
+    const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
+        .map(
+            teamKey =>
+                ({
+                    teamKey,
+                    teamName: LEAGUE_DATA[teamKey].teamName,
+                    topFour: data[teamKey].topFour,
+                    total: data[teamKey].total,
+                }) as TRow,
+        )
+        .sort((a, b) => {
+            if (a.topFour === b.topFour) {
+                return a.total < b.total ? 1 : -1;
+            } else {
+                return a.topFour < b.topFour ? 1 : -1;
+            }
         });
-    }
-    rows.sort((a, b) => {
-        if (a.topFour === b.topFour) {
-            return a.total < b.total ? 1 : -1;
-        } else {
-            return a.topFour < b.topFour ? 1 : -1;
-        }
-    });
+
     return (
         <TableContainer component={Paper}>
             <Table>

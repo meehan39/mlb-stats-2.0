@@ -1,14 +1,13 @@
 import { LEAGUE_DATA } from '../../../../constants';
-import { TeamKey } from '../../../types';
 import { getRosterPromises } from '../../utils';
+import type { TeamKey } from '../../../../constants/types';
 
 export const dynamic = 'force-dynamic';
 export async function GET(
     request: Request,
-    { params }: { params: { teamKey: string } },
+    { params }: { params: { teamKey: TeamKey } },
 ) {
-    const teamKey: TeamKey = params.teamKey as TeamKey;
-    const teamData = LEAGUE_DATA?.[teamKey];
+    const teamData = LEAGUE_DATA?.[params.teamKey];
     if (!teamData) {
         return new Response('Not found', { status: 404 });
     }

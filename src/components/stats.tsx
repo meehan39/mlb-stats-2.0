@@ -12,7 +12,7 @@ import {
 import { redirect } from 'next/navigation';
 import { LEAGUE_DATA } from '../constants';
 
-import type { TeamKey } from '../app/types';
+import type { TeamKey } from '../constants/types';
 import type { PlayerStats } from '../app/api/utils/types';
 
 export interface PropType {
@@ -30,31 +30,40 @@ export default async function Stats(props: PropType) {
     const data: PlayerStats[] = response.data;
     data.sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1));
     return (
-        <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Player</TableCell>
-                        <TableCell align='right'>Home Runs</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map(row => (
-                        <TableRow
-                            key={row.name}
-                            sx={{
-                                '&:last-child td, &:last-child th': {
-                                    border: 0,
-                                },
-                            }}>
-                            <TableCell component='th' scope='row'>
-                                {row.name}
-                            </TableCell>
-                            <TableCell align='right'>{row.homeRuns}</TableCell>
+        <>
+            <div className={`flex w-full justify-start items-center`}>
+                <h2 className={`mb-3 text-xl font-semibold whitespace-nowrap`}>
+                    {LEAGUE_DATA[teamKey].teamName}
+                </h2>
+            </div>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Player</TableCell>
+                            <TableCell align='right'>Home Runs</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {data.map(row => (
+                            <TableRow
+                                key={row.name}
+                                sx={{
+                                    '&:last-child td, &:last-child th': {
+                                        border: 0,
+                                    },
+                                }}>
+                                <TableCell component='th' scope='row'>
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align='right'>
+                                    {row.homeRuns}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     );
 }

@@ -1,23 +1,43 @@
 import axios from 'axios';
-import { SEASON } from '../../../constants';
-import type { Player } from '../../types';
+import { LEAGUE_DATA, MLB_BASE_API, PATHS } from '../../../constants';
+import type { Player, TeamKey } from '../../../constants/types';
 import type { PlayerStats } from './types';
+import type MlbApi from './MlbApi';
 
-export const getRosterPromises = (roster: Player[]): Promise<PlayerStats>[] => {
-    const promises = [];
-    for (const player of roster) {
-        const promise: Promise<PlayerStats> = new Promise(async resolve => {
-            try {
-                const url = `https://statsapi.mlb.com/api/v1/people/${player.id}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`;
-                const { data } = await axios.get(url);
-                const homeRuns =
-                    data.people[0].stats[0].splits[0].stat.homeRuns;
-                resolve({ name: player.name, homeRuns } as PlayerStats);
-            } catch {
-                resolve({ name: player.name, homeRuns: 0 } as PlayerStats);
-            }
-        });
-        promises.push(promise);
+export const getPlayerData = async (
+    playerId: number,
+): Promise<MlbApi.Player | null> => {
+    const url = `${MLB_BASE_API}${PATHS.PLAYER_STATS(playerId)}`;
+    try {
+        const response: MlbApi.Response = await axios.get(url);
+        return response.data.people[0];
+    } catch {
+        return null;
     }
-    return promises;
+};
+
+export const getRosterPromises = (roster: Player[]): Promise<PlayerStats>[] =>
+    roster.map(
+        player =>
+            new Promise<PlayerStats>(async resolve => {
+                const playerData = await getPlayerData(player.id);
+                const stats: PlayerStats = {
+                    name: player.name,
+                    homeRuns:
+                        playerData?.stats?.[0]?.splits?.[0]?.stat?.homeRuns ??
+                        0,
+                };
+                resolve(stats);
+            }),
+    );
+
+export const getOwner = (playerId: number): TeamKey | null => {
+    for (const teamKey in LEAGUE_DATA) {
+        for (const player of LEAGUE_DATA[teamKey as TeamKey].roster) {
+            if (player.id === playerId) {
+                return teamKey as TeamKey;
+            }
+        }
+    }
+    return null;
 };

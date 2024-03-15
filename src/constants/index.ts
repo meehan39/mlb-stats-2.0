@@ -1,7 +1,6 @@
-import type { LeagueData } from '../app/types';
+import type { LeagueData } from './types';
 
 export const SEASON = '2023';
-
 export const LEAGUE_DATA: LeagueData = {
     matt: {
         teamName: 'Matty Hends',
@@ -135,4 +134,9 @@ export const LEAGUE_DATA: LeagueData = {
             { name: 'Trea Turner', id: 607208 },
         ],
     },
+} as const;
+export const MLB_BASE_API = 'https://statsapi.mlb.com';
+export const PATHS = {
+    PLAYER_STATS: (playerId: number) =>
+        `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
 };

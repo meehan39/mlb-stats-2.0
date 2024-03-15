@@ -1,5 +1,5 @@
 import Stats from '../../../components/stats';
-import type { TeamKey } from '../../types';
+import type { TeamKey } from '../../../constants/types';
 
 export default async function Team({
     params,

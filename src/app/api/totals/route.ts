@@ -1,53 +1,51 @@
 import { LEAGUE_DATA } from '../../../constants';
 import { getRosterPromises } from '../utils';
-import type { Team, TeamKey } from '../../types';
-import type { ResponseData } from './types';
-import { PlayerStats } from '../utils/types';
-
-interface TeamHomeRuns {
-    key: TeamKey;
-    homeRuns: PlayerStats[];
-}
+import type { TeamKey } from '../../../constants/types';
+import type Totals from './types';
+import type { TeamHomeRuns } from './types';
+import type { PlayerStats } from '../utils/types';
 
 const getTopFour = (homeRuns: number[]) => {
     const sortedHomeRuns = homeRuns.sort((a, b) => b - a);
     return sortedHomeRuns.slice(0, 4);
 };
 
-const sum = (homeRuns: number[]) => {
-    const total = homeRuns.reduce((sum, value) => sum + value, 0);
-    return total;
-};
+const sum = (homeRuns: number[]) =>
+    homeRuns.reduce((sum, value) => sum + value, 0);
 
 export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
-    const teamPromises = [];
-    for (const teamKey in LEAGUE_DATA) {
-        const key: TeamKey = teamKey as TeamKey;
-        const team: Team = LEAGUE_DATA[key] as any as Team;
-        const rosterPromises = getRosterPromises(team.roster);
-        teamPromises.push({ key: teamKey, promises: rosterPromises });
-    }
+    const teamPromises: {
+        key: TeamKey;
+        promises: Promise<PlayerStats>[];
+    }[] = (Object.keys(LEAGUE_DATA) as TeamKey[]).map(teamKey => {
+        const rosterPromises = getRosterPromises(LEAGUE_DATA[teamKey].roster);
+        return {
+            key: teamKey as TeamKey,
+            promises: rosterPromises,
+        };
+    });
 
-    const homeRunArray = (await Promise.all(
+    const homeRunArray = await Promise.all(
         teamPromises.map(
             rosterPromises =>
                 new Promise(async resolve => {
                     const homeRuns = await Promise.all(rosterPromises.promises);
                     resolve({ key: rosterPromises.key, homeRuns });
-                }),
+                }) as Promise<TeamHomeRuns>,
         ),
-    )) as any as TeamHomeRuns[];
+    );
 
-    const resData: ResponseData = {};
-    for (const team of homeRunArray) {
+    const response = homeRunArray.reduce((acc, team) => {
         const homeRuns = team.homeRuns.map(player => player.homeRuns);
-        const key: TeamKey = team.key;
-        resData[key] = {
-            total: sum(homeRuns),
-            topFour: sum(getTopFour(homeRuns)),
+        return {
+            ...acc,
+            [team.key]: {
+                total: sum(homeRuns),
+                topFour: sum(getTopFour(homeRuns)),
+            },
         };
-    }
+    }, {}) as Totals.Data;
 
-    return Response.json(resData);
+    return Response.json(response);
 }

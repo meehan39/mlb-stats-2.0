@@ -1,21 +1,24 @@
-import type { TeamKey } from '../../types';
+import type { TeamKey } from '../../../constants/types';
+import type { ResponseType } from 'axios';
 
-export interface ResponseData {
-    [TeamKey.MATT]?: TotalHomeRuns;
-    [TeamKey.ALEX_SAP]?: TotalHomeRuns;
-    [TeamKey.MAIDA]?: TotalHomeRuns;
-    [TeamKey.LINARDOS]?: TotalHomeRuns;
-    [TeamKey.DYLAN]?: TotalHomeRuns;
-    [TeamKey.TONY]?: TotalHomeRuns;
-    [TeamKey.MIKE]?: TotalHomeRuns;
-    [TeamKey.JV]?: TotalHomeRuns;
-    [TeamKey.CROG]?: TotalHomeRuns;
-    [TeamKey.NICO]?: TotalHomeRuns;
-    [TeamKey.MEEHAN]?: TotalHomeRuns;
-    [TeamKey.VERDI]?: TotalHomeRuns;
+namespace Totals {
+    type Data = {
+        [key in TeamKey]: TotalHomeRuns;
+    };
+
+    interface TotalHomeRuns {
+        topFour: number;
+        total: number;
+    }
+
+    interface Response extends ResponseType {
+        data: LeagueData;
+    }
 }
 
-export interface TotalHomeRuns {
-    topFour: number;
-    total: number;
+export interface TeamHomeRuns {
+    key: TeamKey;
+    homeRuns: PlayerStats[];
 }
+
+export default Totals;
