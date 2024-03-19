@@ -4,25 +4,24 @@ import type Player from './types';
 export const dynamic = 'force-dynamic';
 export async function GET(
     request: Request,
-    { params }: { params: { playerId: number } },
+    { params }: { params: { playerId: string } },
 ) {
     try {
-        const player = await getPlayerData(params.playerId);
+        const playerId = parseInt(params.playerId);
+        const player = await getPlayerData(playerId);
         if (!player) {
             throw new Error();
         }
-        const stats = player.stats[0].splits[0].stat;
         const responseData: Player.Data = {
             fullName: player.fullName,
-            owner: getOwner(params.playerId),
+            owner: getOwner(playerId),
             currentTeam: player.currentTeam.name,
             position: player.primaryPosition.name,
             bats: player.batSide.description,
-            ...stats,
+            ...player.stats[0].splits[0].stat,
         };
         return Response.json(responseData);
     } catch (e) {
-        console.log(e);
-        return Response.json({});
+        return new Response('Not found', { status: 404 });
     }
 }

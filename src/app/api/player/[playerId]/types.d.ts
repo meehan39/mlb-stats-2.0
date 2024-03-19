@@ -18,6 +18,7 @@ namespace Player {
         baseOnBalls: number;
         doubles: number;
         triples: number;
+        homeRuns: number;
         strikeOuts: number;
         obp: string;
         slg: string;

@@ -22,6 +22,7 @@ export const getRosterPromises = (roster: Player[]): Promise<PlayerStats>[] =>
             new Promise<PlayerStats>(async resolve => {
                 const playerData = await getPlayerData(player.id);
                 const stats: PlayerStats = {
+                    playerId: player.id,
                     name: player.name,
                     homeRuns:
                         playerData?.stats?.[0]?.splits?.[0]?.stat?.homeRuns ??

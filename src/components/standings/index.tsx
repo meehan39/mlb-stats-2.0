@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../utils/axios';
 import {
     Table,
     TableBody,
@@ -15,19 +15,10 @@ import { LEAGUE_DATA } from '../../constants';
 
 import type { TeamKey } from '../../constants/types';
 import type Totals from '../../app/api/totals/types';
-
-export interface TRow {
-    teamKey: string;
-    teamName: string;
-    topFour: number;
-    total: number;
-}
+import type Standings from './types';
 
 export default async function Standings() {
-    const { BASE_URL } = process.env;
-    const { data } = (await axios.get(
-        `${BASE_URL}/api/totals`,
-    )) as Totals.Response;
+    const { data } = (await axios.get(`/api/totals`)) as Totals.Response;
     const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
         .map(
             teamKey =>
@@ -36,7 +27,7 @@ export default async function Standings() {
                     teamName: LEAGUE_DATA[teamKey].teamName,
                     topFour: data[teamKey].topFour,
                     total: data[teamKey].total,
-                }) as TRow,
+                }) as Standings.Row.Props,
         )
         .sort((a, b) => {
             if (a.topFour === b.topFour) {
