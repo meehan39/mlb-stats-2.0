@@ -23,7 +23,7 @@ export default function RootLayout({
             <body className={inter.className}>
                 <AppRouterCacheProvider>
                     <ThemeProvider theme={theme}>
-                        <main className='flex flex-col items-center justify-start p-4 h-[calc(100dvh)]'>
+                        <main className='flex flex-col items-center justify-start p-4 min-h-[calc(100dvh)]'>
                             <Header />
                             {children}
                         </main>
