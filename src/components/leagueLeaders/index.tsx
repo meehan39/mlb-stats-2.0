@@ -15,8 +15,8 @@ import type LeagueLeaders from './types';
 import type LeagueLeadersApi from '../../app/api/leagueLeaders/types';
 
 export default async function LeagueLeaders() {
-    const { data }: LeagueLeadersApi.Response =
-        await axios.get('/api/leagueLeaders');
+    // const { data }: LeagueLeadersApi.Response =
+    //     await axios.get('/api/leagueLeaders');
 
     return (
         <>
@@ -31,7 +31,7 @@ export default async function LeagueLeaders() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map(({ playerId, fullName, owner, homeRuns }) => (
+                        {/* {data.map(({ playerId, fullName, owner, homeRuns }) => (
                             <LeagueLeaderRow
                                 key={playerId}
                                 playerId={playerId}
@@ -39,7 +39,7 @@ export default async function LeagueLeaders() {
                                 teamKey={owner}
                                 homeRuns={homeRuns}
                             />
-                        ))}
+                        ))} */}
                     </TableBody>
                 </Table>
             </TableContainer>
