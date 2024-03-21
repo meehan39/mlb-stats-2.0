@@ -15,7 +15,7 @@ export default async function Player({ playerId }: PlayerComponent.Props) {
     const owner = data.owner ? LEAGUE_DATA[data.owner].teamName : '';
     return (
         <>
-            <Subheader text={owner} />
+            <Subheader text={data.fullName} />
             <TableContainer component={Paper}>
                 <Table>
                     <TableBody>
