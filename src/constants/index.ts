@@ -139,4 +139,5 @@ export const MLB_BASE_API = 'https://statsapi.mlb.com';
 export const PATHS = {
     PLAYER_STATS: (playerId: number) =>
         `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
+    LEAGUE_LEADERS: `/api/v1/stats/leaders?leaderCategories=homeRuns&season=${SEASON}&statGroup=hitting&limit=50`,
 };

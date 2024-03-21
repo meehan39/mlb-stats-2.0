@@ -6,11 +6,23 @@ import type MlbApi from './MlbApi';
 
 export const getPlayerData = async (
     playerId: number,
-): Promise<MlbApi.Player | null> => {
+): Promise<MlbApi.PlayerStats.Player | null> => {
     const url = `${MLB_BASE_API}${PATHS.PLAYER_STATS(playerId)}`;
     try {
-        const response: MlbApi.Response = await axios.get(url);
+        const response: MlbApi.PlayerStats.Response = await axios.get(url);
         return response.data.people[0];
+    } catch {
+        return null;
+    }
+};
+
+export const getLeagueLeaders = async (): Promise<
+    MlbApi.LeagueLeaders.Leader[] | null
+> => {
+    const url = `${MLB_BASE_API}${PATHS.LEAGUE_LEADERS}`;
+    try {
+        const response: MlbApi.LeagueLeaders.Response = await axios.get(url);
+        return response.data.leagueLeaders[0].leaders;
     } catch {
         return null;
     }
