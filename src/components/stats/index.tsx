@@ -9,6 +9,7 @@ import {
     Paper,
 } from '@mui/material';
 import StatsRow from './statsRow';
+import Subheader from '../subheader';
 
 import { redirect } from 'next/navigation';
 import { LEAGUE_DATA } from '../../constants';
@@ -27,11 +28,7 @@ export default async function Stats(props: Stats.Props) {
     data.sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1));
     return (
         <>
-            <div className={`flex w-full justify-start items-center`}>
-                <h2 className={`mb-3 text-xl font-semibold whitespace-nowrap`}>
-                    {LEAGUE_DATA[teamKey].teamName}
-                </h2>
-            </div>
+            <Subheader text={LEAGUE_DATA[teamKey].teamName} />
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

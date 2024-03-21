@@ -1,5 +1,6 @@
 import axios from '../../utils/axios';
 import PlayerRow from './playerRow';
+import Subheader from '../subheader';
 import { Table, TableBody, TableContainer, Paper } from '@mui/material';
 import { LEAGUE_DATA } from '../../constants';
 
@@ -14,11 +15,7 @@ export default async function Player({ playerId }: PlayerComponent.Props) {
     const owner = data.owner ? LEAGUE_DATA[data.owner].teamName : '';
     return (
         <>
-            <div className={`flex w-full justify-start items-center`}>
-                <h2 className={`mb-3 text-xl font-semibold whitespace-nowrap`}>
-                    {data.fullName}
-                </h2>
-            </div>
+            <Subheader text={owner} />
             <TableContainer component={Paper}>
                 <Table>
                     <TableBody>
