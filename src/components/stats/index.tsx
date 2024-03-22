@@ -1,15 +1,6 @@
 import axios from '../../utils/axios';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-} from '@mui/material';
-import StatsRow from './statsRow';
 import Subheader from '../subheader';
+import Table from '../table';
 
 import { redirect } from 'next/navigation';
 import { LEAGUE_DATA } from '../../constants';
@@ -24,31 +15,21 @@ export default async function Stats(props: Stats.Props) {
     if (!team) {
         redirect('/');
     }
-    const { data } = (await axios.get(`/api/team/${teamKey}`)) as Team.Response;
+    const { data }: Team.Response = await axios.get(`/api/team/${teamKey}`);
     data.sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1));
     return (
         <>
             <Subheader text={LEAGUE_DATA[teamKey].teamName} />
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Player</TableCell>
-                            <TableCell align='right'>Home Runs</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.map(({ playerId, name, homeRuns }) => (
-                            <StatsRow
-                                key={playerId}
-                                playerId={playerId}
-                                name={name}
-                                homeRuns={homeRuns}
-                            />
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+            <Table
+                headers={[
+                    { text: 'Player' },
+                    { text: 'Home Runs', align: 'right' },
+                ]}
+                rows={data.map(({ playerId, name, homeRuns }) => ({
+                    link: `/player/${playerId}`,
+                    cells: [name, homeRuns],
+                }))}
+            />
         </>
     );
 }
