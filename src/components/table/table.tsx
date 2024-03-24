@@ -12,7 +12,7 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
                         {headers.map(({ text, align }, index) => (
                             <th
                                 key={index}
-                                className={`text-${align ?? 'left'} p-3 table-cell`}>
+                                className={`${align === 'right' ? 'text-right' : 'text-left'} p-3 table-cell`}>
                                 {text}
                             </th>
                         ))}
