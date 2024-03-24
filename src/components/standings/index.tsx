@@ -1,5 +1,6 @@
 import axios from '../../utils/axios';
 import Table from '../table';
+import Subheader from '../subheader';
 import { LEAGUE_DATA } from '../../constants';
 
 import type { TeamKey } from '../../constants/types';
@@ -23,16 +24,19 @@ export default async function Standings() {
         });
 
     return (
-        <Table
-            headers={[
-                { text: 'Team' },
-                { text: 'Top 4 HRs', align: 'right' },
-                { text: 'Total HRs', align: 'right' },
-            ]}
-            rows={rows.map(({ teamKey, teamName, topFour, total }) => ({
-                link: `/team/${teamKey}`,
-                cells: [teamName, topFour, total],
-            }))}
-        />
+        <>
+            <Subheader text='Standings' showBack={false} />
+            <Table
+                headers={[
+                    { text: 'Team' },
+                    { text: 'Top 4 HRs', align: 'right' },
+                    { text: 'Total HRs', align: 'right' },
+                ]}
+                rows={rows.map(({ teamKey, teamName, topFour, total }) => ({
+                    link: `/team/${teamKey}`,
+                    cells: [teamName, topFour, total],
+                }))}
+            />
+        </>
     );
 }

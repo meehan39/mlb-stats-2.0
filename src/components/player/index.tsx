@@ -11,7 +11,7 @@ export default async function Player({ playerId }: PlayerComponent.Props) {
         `/api/player/${playerId}`,
     );
 
-    const owner = data.owner ? LEAGUE_DATA[data.owner].teamName : '';
+    const owner = data.owner ? LEAGUE_DATA[data.owner].teamName : 'None';
     return (
         <>
             <Subheader text={data.fullName} />
@@ -23,24 +23,24 @@ export default async function Player({ playerId }: PlayerComponent.Props) {
                 ]}
                 rows={[
                     { cells: ['Owner', owner] },
-                    { cells: ['HR', data.homeRuns] },
-                    { cells: ['Team', data.currentTeam] },
-                    { cells: ['Pos', data.position] },
-                    { cells: ['Bats', data.bats] },
-                    { cells: ['GP', data.gamesPlayed] },
-                    { cells: ['AB', data.atBats] },
-                    { cells: ['PA', data.plateAppearances] },
-                    { cells: ['Hits', data.hits] },
-                    { cells: ['Runs', data.runs] },
-                    { cells: ['RBI', data.rbi] },
-                    { cells: ['Avg', data.avg] },
-                    { cells: ['BB', data.baseOnBalls] },
-                    { cells: ['2B', data.doubles] },
-                    { cells: ['3B', data.triples] },
-                    { cells: ['SO', data.strikeOuts] },
-                    { cells: ['OBP', data.obp] },
-                    { cells: ['SLG', data.slg] },
-                    { cells: ['OPS', data.ops] },
+                    { cells: ['HR', data?.homeRuns ?? '0'] },
+                    { cells: ['Team', data?.currentTeam ?? ''] },
+                    { cells: ['Pos', data?.position ?? ''] },
+                    { cells: ['Bats', data?.bats ?? ''] },
+                    { cells: ['GP', data?.gamesPlayed ?? '0'] },
+                    { cells: ['AB', data?.atBats ?? '0'] },
+                    { cells: ['PA', data?.plateAppearances ?? '0'] },
+                    { cells: ['Hits', data?.hits ?? '0'] },
+                    { cells: ['Runs', data?.runs ?? '0'] },
+                    { cells: ['RBI', data?.rbi ?? '0'] },
+                    { cells: ['Avg', data?.avg ?? '.000'] },
+                    { cells: ['BB', data?.baseOnBalls ?? '0'] },
+                    { cells: ['2B', data?.doubles ?? '0'] },
+                    { cells: ['3B', data?.triples ?? '0'] },
+                    { cells: ['SO', data?.strikeOuts ?? '0'] },
+                    { cells: ['OBP', data?.obp ?? '.000'] },
+                    { cells: ['SLG', data?.slg ?? '.000'] },
+                    { cells: ['OPS', data?.ops ?? '.000'] },
                 ]}
             />
         </>
