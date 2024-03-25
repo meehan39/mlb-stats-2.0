@@ -18,7 +18,7 @@ export async function GET(
             currentTeam: player.currentTeam.name,
             position: player.primaryPosition.name,
             bats: player.batSide.description,
-            ...player.stats[0].splits[0].stat,
+            ...player?.stats?.[0]?.splits?.[0]?.stat,
         };
         return Response.json(responseData);
     } catch (e) {
