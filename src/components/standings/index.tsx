@@ -4,10 +4,10 @@ import Subheader from '../subheader';
 import { LEAGUE_DATA } from '../../constants';
 
 import type { TeamKey } from '../../constants/types';
-import type Totals from '../../app/api/totals/types';
+import type Totals from '../../app/api/standings/types';
 
 export default async function Standings() {
-    const { data }: Totals.Response = await axios.get(`/api/totals`);
+    const { data }: Totals.Response = await axios.get(`/api/standings`);
     const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
         .map(teamKey => ({
             teamKey,

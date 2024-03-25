@@ -1,4 +1,4 @@
-import Stats from '../../../components/stats';
+import TeamComponent from '../../../components/team';
 import type { TeamKey } from '../../../constants/types';
 
 export default async function Team({
@@ -6,5 +6,5 @@ export default async function Team({
 }: {
     params: { teamKey: TeamKey };
 }) {
-    return <Stats teamKey={params.teamKey} />;
+    return <TeamComponent teamKey={params.teamKey} />;
 }

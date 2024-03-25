@@ -1,4 +1,4 @@
-namespace Stats {
+namespace Team {
     interface Props {
         teamKey: TeamKey;
     }

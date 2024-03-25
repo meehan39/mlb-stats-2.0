@@ -6,20 +6,15 @@ import { redirect } from 'next/navigation';
 import { LEAGUE_DATA } from '../../constants';
 
 import type { TeamKey } from '../../constants/types';
-import type Team from '../../app/api/team/[teamKey]/types';
-import type Stats from './types';
+import type TeamApi from '../../app/api/team/[teamKey]/types';
+import type TeamComponent from './types';
 
-export default async function Stats(props: Stats.Props) {
-    const teamKey: TeamKey = props.teamKey;
-    const team = LEAGUE_DATA[teamKey];
-    if (!team) {
-        redirect('/');
-    }
-    const { data }: Team.Response = await axios.get(`/api/team/${teamKey}`);
+export default async function Team({ teamKey }: TeamComponent.Props) {
+    const { data }: TeamApi.Response = await axios.get(`/api/team/${teamKey}`);
     data.sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1));
     return (
         <>
-            <Subheader text={LEAGUE_DATA[teamKey].teamName} />
+            <Subheader text={LEAGUE_DATA[teamKey as TeamKey].teamName} />
             <Table
                 headers={[
                     { text: 'Player' },
