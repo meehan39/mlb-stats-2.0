@@ -1,7 +1,7 @@
 import { LEAGUE_DATA } from '../../../constants';
 import { getRosterPromises } from '../utils';
 import type { TeamKey } from '../../../constants/types';
-import type Totals from './types';
+import type Standings from './types';
 import type { TeamHomeRuns } from './types';
 import type { PlayerStats } from '../utils/types';
 
@@ -45,7 +45,7 @@ export async function GET(request: Request) {
                 topFour: sum(getTopFour(homeRuns)),
             },
         };
-    }, {}) as Totals.Data;
+    }, {}) as Standings.Data;
 
     return Response.json(response);
 }

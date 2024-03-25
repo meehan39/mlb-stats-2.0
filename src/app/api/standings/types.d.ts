@@ -1,7 +1,7 @@
 import type { TeamKey } from '../../../constants/types';
 import type { ResponseType } from 'axios';
 
-namespace Totals {
+namespace Standings {
     type Data = {
         [key in TeamKey]: TotalHomeRuns;
     };
@@ -21,4 +21,4 @@ export interface TeamHomeRuns {
     homeRuns: PlayerStats[];
 }
 
-export default Totals;
+export default Standings;

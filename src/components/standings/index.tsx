@@ -7,7 +7,6 @@ import type { TeamKey } from '../../constants/types';
 import type Totals from '../../app/api/standings/types';
 
 export default async function Standings() {
-try {
     const { data }: Totals.Response = await axios.get(`/api/standings`);
     const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
         .map(teamKey => ({
@@ -29,18 +28,18 @@ try {
             <Subheader text='Standings' showBack={false} />
             <Table
                 headers={[
+                    { text: 'Rank' },
                     { text: 'Team' },
                     { text: 'Top 4 HRs', align: 'right' },
                     { text: 'Total HRs', align: 'right' },
                 ]}
-                rows={rows.map(({ teamKey, teamName, topFour, total }) => ({
-                    link: `/team/${teamKey}`,
-                    cells: [teamName, topFour, total],
-                }))}
+                rows={rows.map(
+                    ({ teamKey, teamName, topFour, total }, index) => ({
+                        link: `/team/${teamKey}`,
+                        cells: [index + 1, teamName, topFour, total],
+                    }),
+                )}
             />
         </>
     );
-} catch (e) {
-    return <div>{JSON.stringify(e)}</div>;
-}
 }

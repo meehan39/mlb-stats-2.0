@@ -14,18 +14,22 @@ export default async function LeagueLeaders() {
             <Subheader text='League Leaders' />
             <Table
                 headers={[
+                    { text: 'Rank' },
                     { text: 'Players' },
                     { text: 'Owner' },
                     { text: 'HRs', align: 'right' },
                 ]}
-                rows={data.map(({ playerId, fullName, owner, homeRuns }) => ({
-                    link: `/player/${playerId}`,
-                    cells: [
-                        fullName,
-                        owner ? LEAGUE_DATA[owner].teamName : '',
-                        homeRuns,
-                    ],
-                }))}
+                rows={data.map(
+                    ({ playerId, fullName, owner, homeRuns }, index) => ({
+                        link: `/player/${playerId}`,
+                        cells: [
+                            index + 1,
+                            fullName,
+                            owner ? LEAGUE_DATA[owner].teamName : '',
+                            homeRuns,
+                        ],
+                    }),
+                )}
             />
         </>
     );
