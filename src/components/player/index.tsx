@@ -22,7 +22,10 @@ export default async function Player({ playerId }: PlayerComponent.Props) {
                     { text: 'value', align: 'right' },
                 ]}
                 rows={[
-                    { cells: ['Owner', owner] },
+                    {
+                        cells: ['Owner', owner],
+                        link: data.owner ? `/team/${data.owner}` : undefined,
+                    },
                     { cells: ['HR', data?.homeRuns ?? '0'] },
                     { cells: ['Team', data?.currentTeam ?? ''] },
                     { cells: ['Pos.', data?.position ?? ''] },
