@@ -69,7 +69,7 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
                                         : undefined
                                 }
                                 key={index}
-                                className={`p-3 table-cell`}>
+                                className={`p-3 table-cell ${sort ? 'cursor-pointer' : ''}`}>
                                 <div
                                     className={`flex items-center ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
                                     {text} {sort && <Sort />}
