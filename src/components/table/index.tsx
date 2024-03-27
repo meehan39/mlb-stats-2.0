@@ -42,7 +42,7 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
                 {cells.map((cell, index) => (
                     <td
                         key={index}
-                        className={`p-3 text-${headers[index].align ?? 'left'}`}>
+                        className={`p-3 ${headers[index].align === 'right' ? 'text-right' : 'text-left'}`}>
                         {cell}
                     </td>
                 ))}
