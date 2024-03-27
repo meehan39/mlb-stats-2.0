@@ -7,6 +7,7 @@ namespace Table {
     interface Header {
         text: string;
         align?: 'left' | 'right' | 'center';
+        sort?: boolean;
     }
     interface Row {
         cells: Cell[];

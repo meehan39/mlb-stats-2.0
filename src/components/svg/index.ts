@@ -1,4 +1,5 @@
 import HomeIcon from './home';
 import BackIcon from './back';
 import LeagueLeadersIcon from './league-leaders';
-export { HomeIcon, BackIcon, LeagueLeadersIcon };
+import Sort from './sort';
+export { HomeIcon, BackIcon, LeagueLeadersIcon, Sort };

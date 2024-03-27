@@ -28,10 +28,10 @@ export default async function Standings() {
             <Subheader text='Standings' showBack={false} />
             <Table
                 headers={[
-                    { text: 'Rank' },
+                    { text: 'Rank', sort: true },
                     { text: 'Team' },
-                    { text: 'Top 4 HRs', align: 'right' },
-                    { text: 'Total HRs', align: 'right' },
+                    { text: 'Top 4', align: 'right', sort: true },
+                    { text: 'Total', align: 'right', sort: true },
                 ]}
                 rows={rows.map(
                     ({ teamKey, teamName, topFour, total }, index) => ({
