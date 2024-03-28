@@ -1,6 +1,6 @@
 {
     "name": "mlb-stats-2.0",
-    "version": "0.8.2",
+    "version": "1.0.0",
     "private": true,
     "engines": {
         "node": "18.18.0",
