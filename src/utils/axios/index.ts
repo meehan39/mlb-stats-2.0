@@ -11,6 +11,7 @@ axiosInterceptorInstance.interceptors.request.use(
     config => {
         // Modify the request config here (add headers, authentication tokens)
         // If token is present add it to request's Authorization Header
+        config.headers['Cache-Control'] = 'no-cache';
         return config;
     },
     error => {
