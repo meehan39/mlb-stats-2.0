@@ -17,8 +17,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={inter.className}>
-                <main className='flex flex-col items-center justify-start p-4 min-h-[calc(100dvh)]'>
+            <body
+                className={`${inter.className} flex justify-center content-stretch`}>
+                <main className='flex flex-col items-center justify-start p-4 min-h-[calc(100dvh)] max-w-screen-md flex-1'>
                     <Header />
                     {children}
                 </main>

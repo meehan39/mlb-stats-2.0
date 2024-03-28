@@ -19,7 +19,7 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
             const a = rowA.cells[index];
             const b = rowB.cells[index];
             if (typeof a === 'number' && typeof b === 'number') {
-                return b - a;
+                return a - b;
             } else if (typeof a === 'string' && typeof b === 'string') {
                 return a.localeCompare(b);
             } else {
