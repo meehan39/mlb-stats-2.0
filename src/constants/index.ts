@@ -139,5 +139,18 @@ export const MLB_BASE_API = 'https://statsapi.mlb.com';
 export const PATHS = {
     PLAYER_STATS: (playerId: number) =>
         `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
+    MONTHLY_PLAYER_STATS: (playerId: number, startDate: Date, endDate: Date) =>
+        `/api/v1/people/${playerId}/stats?stats=byDateRange&group=hitting&startDate=08/01/2023&endDate=08/30/2023`,
     LEAGUE_LEADERS: `/api/v1/stats/leaders?leaderCategories=homeRuns&season=${SEASON}&statGroup=hitting&limit=50`,
+};
+
+export const timeSpanValues = {
+    season: 'Season',
+    '3': 'March',
+    '4': 'April',
+    '5': 'May',
+    '6': 'June',
+    '7': 'July',
+    '8': 'August',
+    '9': 'September',
 };

@@ -25,3 +25,5 @@ export interface Team {
 export type LeagueData = {
     [key in TeamKey]: Team;
 };
+
+export type TimeSpan = 'season' | '3' | '4' | '5' | '6' | '7' | '8' | '9';

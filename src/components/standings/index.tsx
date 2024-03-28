@@ -7,6 +7,7 @@ import type { TeamKey } from '../../constants/types';
 import type Totals from '../../app/api/standings/types';
 
 export default async function Standings() {
+
     const { data }: Totals.Response = await axios.get(`/api/standings`);
     const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
         .map(teamKey => ({

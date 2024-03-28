@@ -57,7 +57,7 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
     return (
         <table className='table-auto w-full border-collapse text-sm'>
             {!hideHeader && (
-                <thead className='sticky top-16 table-header-group bg-slate-900 shadow'>
+                <thead className='sticky top-16 table-header-group bg-slate-900 shadow z-0'>
                     <tr>
                         {headers.map(({ text, align, sort }, index) => (
                             <th
