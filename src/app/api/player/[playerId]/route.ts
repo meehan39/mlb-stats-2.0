@@ -1,5 +1,6 @@
-import { getPlayerData, getOwner } from '../../utils';
+import { getPlayerData, getOwner, parseQueryString } from '../../utils';
 import type Player from './types';
+import type { TimeSpan } from '../../../../constants/types';
 
 export const dynamic = 'force-dynamic';
 export async function GET(
@@ -7,8 +8,10 @@ export async function GET(
     { params }: { params: { playerId: string } },
 ) {
     try {
+        const timeSpan =
+            (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
         const playerId = parseInt(params.playerId);
-        const player = await getPlayerData(playerId);
+        const player = await getPlayerData(playerId, timeSpan);
         if (!player) {
             throw new Error();
         }

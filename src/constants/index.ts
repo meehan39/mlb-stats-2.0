@@ -1,6 +1,6 @@
-import type { LeagueData } from './types';
+import type { LeagueData, TimeSpan } from './types';
 
-export const SEASON = '2024';
+export const SEASON = '2023';
 export const LEAGUE_DATA: LeagueData = {
     matt: {
         teamName: 'Matty Hends',
@@ -139,8 +139,19 @@ export const MLB_BASE_API = 'https://statsapi.mlb.com';
 export const PATHS = {
     PLAYER_STATS: (playerId: number) =>
         `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
-    MONTHLY_PLAYER_STATS: (playerId: number, startDate: Date, endDate: Date) =>
-        `/api/v1/people/${playerId}/stats?stats=byDateRange&group=hitting&startDate=08/01/2023&endDate=08/30/2023`,
+    MONTHLY_PLAYER_STATS: (playerId: number, month: TimeSpan) => {
+        const firstDay = new Date(
+            parseInt(SEASON),
+            parseInt(month) - 1,
+            1,
+        ).toLocaleDateString();
+        const lastDay = new Date(
+            parseInt(SEASON),
+            parseInt(month),
+            0,
+        ).toLocaleDateString();
+        return `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=byDateRange,sportId=1,startDate=${firstDay},endDate=${lastDay}),currentTeam`;
+    },
     LEAGUE_LEADERS: `/api/v1/stats/leaders?leaderCategories=homeRuns&season=${SEASON}&statGroup=hitting&limit=50`,
 };
 
