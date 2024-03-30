@@ -21,10 +21,13 @@ export const getPlayerData = async (
     }
 };
 
-export const getLeagueLeaders = async (): Promise<
-    MlbApi.LeagueLeaders.Leader[] | null
-> => {
-    const url = `${MLB_BASE_API}${PATHS.LEAGUE_LEADERS}`;
+export const getLeagueLeaders = async (
+    timeSpan: TimeSpan,
+): Promise<MlbApi.LeagueLeaders.Leader[] | null> => {
+    const url =
+        timeSpan === 'season'
+            ? `${MLB_BASE_API}${PATHS.LEAGUE_LEADERS}`
+            : `${MLB_BASE_API}${PATHS.MONTHLY_LEAGUE_LEADERS(timeSpan)}`;
     try {
         const response: MlbApi.LeagueLeaders.Response = await axios.get(url);
         return response.data.leagueLeaders[0].leaders;

@@ -1,17 +1,39 @@
+'use client';
 import axios from '../../utils/axios';
 import Subheader from '../subheader';
 import Table from '../table';
 
-import { redirect } from 'next/navigation';
 import { LEAGUE_DATA } from '../../constants';
+import { useAppSelector } from '../../lib/hooks';
+import { selectTimeSpan } from '../../lib/timeSpan/slice';
+import { useEffect, useState } from 'react';
 
-import type { TeamKey } from '../../constants/types';
+import type Team from './types';
 import type TeamApi from '../../app/api/team/[teamKey]/types';
-import type TeamComponent from './types';
+import type TableTypes from '../table/types';
+import type { TeamKey } from '../../constants/types';
 
-export default async function Team({ teamKey }: TeamComponent.Props) {
-    const { data }: TeamApi.Response = await axios.get(`/api/team/${teamKey}`);
-    data.sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1));
+export default function Team({ teamKey }: Team.Props) {
+    const timeSpan = useAppSelector(selectTimeSpan);
+    const [rows, setRows]: [TableTypes.Row[], any] = useState([]);
+
+    useEffect(() => {
+        const fetchTeam = async () => {
+            const { data }: TeamApi.Response = await axios.get(
+                `/api/team/${teamKey}?timeSpan=${timeSpan}`,
+            );
+            setRows(
+                data
+                    .sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1))
+                    .map(({ playerId, name, homeRuns }) => ({
+                        link: `/player/${playerId}`,
+                        cells: [name, homeRuns],
+                    })),
+            );
+        };
+        fetchTeam();
+    }, [timeSpan, teamKey]);
+
     return (
         <>
             <Subheader text={LEAGUE_DATA[teamKey as TeamKey].teamName} />
@@ -20,10 +42,7 @@ export default async function Team({ teamKey }: TeamComponent.Props) {
                     { text: 'Player' },
                     { text: 'Home Runs', align: 'right' },
                 ]}
-                rows={data.map(({ playerId, name, homeRuns }) => ({
-                    link: `/player/${playerId}`,
-                    cells: [name, homeRuns],
-                }))}
+                rows={rows}
             />
         </>
     );

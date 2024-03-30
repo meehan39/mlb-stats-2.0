@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Sort } from '../svg';
 import type Table from './types';
 
@@ -53,6 +53,12 @@ export default function Table({ headers, rows, hideHeader }: Table.Props) {
     const [sortIndex, setSortIndex] = useState(-1);
     const [sortedRows, setSortedRows] = useState(rows);
     const [rowComponents, setRowComponents] = useState(renderRows());
+
+    useEffect(() => {
+        setSortIndex(-1);
+        setSortedRows(rows);
+        setRowComponents(renderRows());
+    }, [rows]);
 
     return (
         <table className='table-auto w-full border-collapse text-sm'>

@@ -135,24 +135,35 @@ export const LEAGUE_DATA: LeagueData = {
         ],
     },
 } as const;
+
 export const MLB_BASE_API = 'https://statsapi.mlb.com';
+
 export const PATHS = {
     PLAYER_STATS: (playerId: number) =>
         `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
     MONTHLY_PLAYER_STATS: (playerId: number, month: TimeSpan) => {
-        const firstDay = new Date(
-            parseInt(SEASON),
-            parseInt(month) - 1,
-            1,
-        ).toLocaleDateString();
-        const lastDay = new Date(
-            parseInt(SEASON),
-            parseInt(month),
-            0,
-        ).toLocaleDateString();
+        const { firstDay, lastDay } = getDateRange(month);
         return `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=byDateRange,sportId=1,startDate=${firstDay},endDate=${lastDay}),currentTeam`;
     },
     LEAGUE_LEADERS: `/api/v1/stats/leaders?leaderCategories=homeRuns&season=${SEASON}&statGroup=hitting&limit=50`,
+    MONTHLY_LEAGUE_LEADERS: (month: TimeSpan) => {
+        const { firstDay, lastDay } = getDateRange(month);
+        return `/api/v1/stats/leaders?leaderCategories=homeRuns&statGroup=hitting&limit=50&statType=byDateRange&startDate=${firstDay}&endDate=${lastDay}`;
+    },
+};
+
+const getDateRange = (month: TimeSpan) => {
+    const firstDay = new Date(
+        parseInt(SEASON),
+        parseInt(month) - 1,
+        1,
+    ).toLocaleDateString();
+    const lastDay = new Date(
+        parseInt(SEASON),
+        parseInt(month),
+        0,
+    ).toLocaleDateString();
+    return { firstDay, lastDay };
 };
 
 export const timeSpanValues = {

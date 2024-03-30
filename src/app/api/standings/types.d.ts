@@ -1,4 +1,5 @@
 import type { TeamKey } from '../../../constants/types';
+import type { LeagueData } from '../../../constants/types';
 import type { ResponseType } from 'axios';
 
 namespace Standings {
@@ -12,7 +13,7 @@ namespace Standings {
     }
 
     interface Response extends ResponseType {
-        data: LeagueData;
+        data: Data;
     }
 }
 

@@ -1,8 +1,12 @@
-import { getLeagueLeaders, getOwner } from '../utils';
+import { getLeagueLeaders, getOwner, parseQueryString } from '../utils';
 import type LeagueLeaders from './types';
+import type { TimeSpan } from '../../../constants/types';
 
 export async function GET(request: Request) {
-    const leagueLeaders = await getLeagueLeaders();
+    const timeSpan =
+        (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
+
+    const leagueLeaders = await getLeagueLeaders(timeSpan);
     const response: LeagueLeaders.Player[] =
         leagueLeaders?.map(player => ({
             playerId: player.person.id,

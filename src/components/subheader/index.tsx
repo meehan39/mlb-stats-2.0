@@ -4,14 +4,9 @@ import { HomeIcon, LeagueLeadersIcon, BackIcon } from '../svg';
 import Icon from './icon';
 import Dropdown from '../dropdown';
 
-import { useAppSelector, useAppDispatch } from '../../lib/hooks';
-import { setTimeSpan } from '../../lib/timeSpan/slice';
-
 import type Subheader from './types';
 
 export default function Subheader({ text, showBack = true }: Subheader.Props) {
-    const timeSpan = useAppSelector(state => state.timeSpan.value);
-    const dispatch = useAppDispatch();
     const router = useRouter();
     return (
         <nav
