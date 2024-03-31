@@ -2,6 +2,7 @@ import { getLeagueLeaders, getOwner, parseQueryString } from '../utils';
 import type LeagueLeaders from './types';
 import type { TimeSpan } from '../../../constants/types';
 
+export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
     const timeSpan =
         (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';

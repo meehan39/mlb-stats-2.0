@@ -4,16 +4,28 @@ namespace Table {
         headers: Header[];
         rows: Row[];
     }
+    namespace TBody {
+        interface Props {
+            rows: Row[];
+            alignments: Alignment[];
+        }
+    }
+    namespace THead {
+        interface Props {
+            headers: Header[];
+        }
+    }
     interface Header {
         text: string;
-        align?: 'left' | 'right' | 'center';
-        sort?: boolean;
+        align?: Alignment;
+        sort?: () => void;
     }
     interface Row {
         cells: Cell[];
         link?: string;
     }
     type Cell = number | string;
+    type Alignment = 'left' | 'right' | 'center';
 }
 
 export default Table;

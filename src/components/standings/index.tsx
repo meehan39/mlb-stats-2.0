@@ -2,6 +2,7 @@
 import Table from '../table';
 import Subheader from '../subheader';
 import axios from '../../utils/axios';
+
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../lib/hooks';
 import { selectTimeSpan } from '../../lib/timeSpan/slice';
@@ -16,43 +17,62 @@ export default function Standings() {
     const timeSpan = useAppSelector(selectTimeSpan);
     const [rows, setRows]: [TableTypes.Row[], any] = useState([]);
 
+    const sortRows = (
+        unsortedRows: TableTypes.Row[],
+        primary: number,
+        secondary: number,
+    ) =>
+        structuredClone(
+            unsortedRows.sort((a, b) => {
+                if (a.cells[primary] === b.cells[primary]) {
+                    return a.cells[secondary] < b.cells[secondary] ? 1 : -1;
+                } else {
+                    return a.cells[primary] < b.cells[primary] ? 1 : -1;
+                }
+            }),
+        );
+
     useEffect(() => {
         const fetchStandings = async () => {
             const { data }: StandingsApi.Response = await axios.get(
                 `/api/standings?timeSpan=${timeSpan}`,
             );
-            const rows = (Object.keys(LEAGUE_DATA) as TeamKey[])
-                .map(teamKey => ({
-                    teamKey,
-                    teamName: LEAGUE_DATA[teamKey].teamName,
-                    topFour: data[teamKey].topFour,
-                    total: data[teamKey].total,
-                }))
-                .sort((a, b) => {
-                    if (a.topFour === b.topFour) {
-                        return a.total < b.total ? 1 : -1;
-                    } else {
-                        return a.topFour < b.topFour ? 1 : -1;
-                    }
-                })
-                .map(({ teamKey, teamName, topFour, total }, index) => ({
+            const dataRows = (Object.keys(LEAGUE_DATA) as TeamKey[]).map(
+                teamKey => ({
                     link: `/team/${teamKey}`,
-                    cells: [index + 1, teamName, topFour, total],
-                }));
-            setRows(rows);
+                    cells: [
+                        LEAGUE_DATA[teamKey].teamName,
+                        data[teamKey].topFour,
+                        data[teamKey].total,
+                    ],
+                }),
+            );
+            setRows(
+                sortRows(dataRows, 1, 2).map(({ link, cells }, index) => ({
+                    link,
+                    cells: [index + 1, ...cells],
+                })),
+            );
         };
         fetchStandings();
     }, [timeSpan]);
+
+    const topFourSort = () => {
+        setRows(sortRows(rows, 2, 3));
+    };
+    const totalSort = () => {
+        setRows(sortRows(rows, 3, 2));
+    };
 
     return (
         <>
             <Subheader text='Standings' showBack={false} />
             <Table
                 headers={[
-                    { text: 'Rank', sort: true },
+                    { text: 'Rank', sort: topFourSort },
                     { text: 'Team' },
-                    { text: 'Top 4', align: 'right', sort: true },
-                    { text: 'Total', align: 'right', sort: true },
+                    { text: 'Top 4', align: 'right', sort: topFourSort },
+                    { text: 'Total', align: 'right', sort: totalSort },
                 ]}
                 rows={rows}
             />
