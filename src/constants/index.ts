@@ -1,6 +1,6 @@
 import type { LeagueData, TimeSpan } from './types';
 
-export const SEASON = '2024';
+export const { SEASON } = process.env ?? 2024;
 export const LEAGUE_DATA: LeagueData = {
     matt: {
         teamName: 'Matty Hends',
