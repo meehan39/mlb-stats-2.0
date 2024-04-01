@@ -11,7 +11,7 @@ export default function Icon({ path, children }: Subheader.Icon.Props) {
             onClick={() =>
                 !shouldHighlight && router.push(path, { scroll: false })
             }
-            className={`rounded-lg border border-transparent p-2 transition-colors ${shouldHighlight ? 'stroke-sky-600 fill-sky-600' : 'fill-white stroke-white cursor-pointer hover:border-slate-700 hover:bg-slate-800/30'}`}>
+            className={`rounded-lg border border-transparent p-2 transition-colors ${shouldHighlight ? 'text-sky-600' : 'text-white cursor-pointer hover:border-slate-700 hover:bg-slate-800/30'}`}>
             {children}
         </div>
     );

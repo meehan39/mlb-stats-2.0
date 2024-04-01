@@ -1,7 +1,6 @@
 namespace Subheader {
     interface Props {
         text: string;
-        showBack?: boolean;
     }
     namespace Icon {
         interface Props {

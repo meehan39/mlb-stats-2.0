@@ -66,7 +66,7 @@ export default function Standings() {
 
     return (
         <>
-            <Subheader text='Standings' showBack={false} />
+            <Subheader text='Standings' />
             <Table
                 headers={[
                     { text: 'Rank', sort: topFourSort },

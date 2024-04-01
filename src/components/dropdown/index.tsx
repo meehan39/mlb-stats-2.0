@@ -1,10 +1,9 @@
 import { Menu, Transition } from '@headlessui/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-
 import { useAppSelector, useAppDispatch } from '../../lib/hooks';
+import { selectTimeSpan } from '../../lib/timeSpan/slice';
 import { setTimeSpan } from '../../lib/timeSpan/slice';
-
 import { timeSpanValues } from '../../constants';
 import { TimeSpan } from '../../constants/types';
 
@@ -15,7 +14,7 @@ export default function TimeSpanDropdown() {
     )
         .concat(['season'])
         .reverse();
-    const timeSpan = useAppSelector(state => state.timeSpan.value);
+    const timeSpan = useAppSelector(selectTimeSpan);
     const dispatch = useAppDispatch();
     return (
         <Menu as='div' className='relative inline-block text-left'>
@@ -23,7 +22,7 @@ export default function TimeSpanDropdown() {
                 <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
                     {timeSpanValues[timeSpan]}
                     <ChevronDownIcon
-                        className='-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100'
+                        className='-mr-1 ml-2 h-5 w-5'
                         aria-hidden='true'
                     />
                 </Menu.Button>

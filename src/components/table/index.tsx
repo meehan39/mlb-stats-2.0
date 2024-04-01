@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Sort } from '../svg';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import type Table from './types';
 
 export default function Table({
@@ -67,7 +67,8 @@ function THead({ headers }: Table.THead.Props) {
                         className={`p-3 table-cell ${sort ? 'cursor-pointer' : ''}`}>
                         <div
                             className={`flex items-center ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
-                            {text} {sort && <Sort />}
+                            {text}{' '}
+                            {sort && <ChevronDownIcon className='h-4 w-4' />}
                         </div>
                     </th>
                 ))}
