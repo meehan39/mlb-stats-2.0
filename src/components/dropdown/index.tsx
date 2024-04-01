@@ -19,7 +19,7 @@ export default function TimeSpanDropdown() {
     return (
         <Menu as='div' className='relative inline-block text-left'>
             <div>
-                <Menu.Button className='inline-flex w-full justify-center rounded-md bg-black/20 px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
+                <Menu.Button className='inline-flex w-full justify-center rounded-md bg-white/20 dark:bg-black/20 px-4 py-2 text-sm font-medium text-black dark:text-white hover:bg-white/30 dark:hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75'>
                     {timeSpanValues[timeSpan]}
                     <ChevronDownIcon
                         className='-mr-1 ml-2 h-5 w-5'
@@ -35,14 +35,14 @@ export default function TimeSpanDropdown() {
                 leave='transition ease-in duration-75'
                 leaveFrom='transform opacity-100 scale-100'
                 leaveTo='transform opacity-0 scale-95'>
-                <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10'>
+                <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 dark:divide-slate-900 rounded-md bg-white dark:bg-[--background] shadow-lg ring-1 ring-black/5 focus:outline-none z-10'>
                     {timeSpanKeys.map(timeSpanKey => (
                         <Menu.Item key={timeSpanKey}>
                             <button
                                 onClick={() =>
                                     dispatch(setTimeSpan(timeSpanKey))
                                 }
-                                className={`${'bg-white text-slate-800'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}>
+                                className='text-slate-800 dark:text-slate-100 hover:bg-black/10 dark:hover:bg-black/30 group flex w-full items-center rounded-md px-2 py-2 text-sm'>
                                 {timeSpanValues[timeSpanKey]}
                             </button>
                         </Menu.Item>
