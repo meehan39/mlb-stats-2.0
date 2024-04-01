@@ -35,7 +35,7 @@ export default function TimeSpanDropdown() {
                 leave='transition ease-in duration-75'
                 leaveFrom='transform opacity-100 scale-100'
                 leaveTo='transform opacity-0 scale-95'>
-                <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 dark:divide-slate-900 rounded-md bg-white dark:bg-[--background] shadow-lg ring-1 ring-black/5 focus:outline-none z-10'>
+                <Menu.Items className='absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 dark:divide-slate-900 rounded-md bg-white dark:bg-slate-700 shadow-lg ring-1 ring-black/5 focus:outline-none z-10'>
                     {timeSpanKeys.map(timeSpanKey => (
                         <Menu.Item key={timeSpanKey}>
                             <button

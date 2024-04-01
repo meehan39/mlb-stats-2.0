@@ -37,7 +37,7 @@ function TBody({ rows: rowProps, alignments }: Table.TBody.Props) {
             {rows.map(({ cells, link }, index) => (
                 <tr
                     key={index}
-                    className={`bg-slate-300 dark:bg-slate-800 hover:bg-slate-400 dark:hover:bg-slate-700 ${link ? 'cursor-pointer' : ''}`}
+                    className={`bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 ${link ? 'cursor-pointer' : ''}`}
                     onClick={
                         link
                             ? () => router.push(link, { scroll: false })
@@ -58,7 +58,7 @@ function TBody({ rows: rowProps, alignments }: Table.TBody.Props) {
 
 function THead({ headers }: Table.THead.Props) {
     return (
-        <thead className='sticky top-16 table-header-group bg-slate-500 dark:bg-slate-900 shadow z-0'>
+        <thead className='sticky top-16 table-header-group bg-slate-400 dark:bg-slate-900 shadow z-0'>
             <tr>
                 {headers.map(({ text, align, sort }, index) => (
                     <th
