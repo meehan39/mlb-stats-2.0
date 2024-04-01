@@ -42,7 +42,7 @@ export default function TimeSpanDropdown() {
                                 onClick={() =>
                                     dispatch(setTimeSpan(timeSpanKey))
                                 }
-                                className='text-slate-800 dark:text-slate-100 hover:bg-black/10 dark:hover:bg-black/30 group flex w-full items-center rounded-md px-2 py-2 text-sm'>
+                                className='text-slate-800 dark:text-white hover:bg-black/10 dark:hover:bg-black/30 group flex w-full items-center rounded-md px-2 py-2 text-sm'>
                                 {timeSpanValues[timeSpanKey]}
                             </button>
                         </Menu.Item>
