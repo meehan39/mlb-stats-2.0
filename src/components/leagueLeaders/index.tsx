@@ -10,6 +10,7 @@ import { selectTimeSpan } from '../../lib/timeSpan/slice';
 import type LeagueLeaders from '../../app/api/leagueLeaders/types';
 import type TableTypes from '../table/types';
 
+export const dynamic = 'force-dynamic';
 export default function LeagueLeaders() {
     const timeSpan = useAppSelector(selectTimeSpan);
     const [rows, setRows]: [TableTypes.Row[], any] = useState([]);

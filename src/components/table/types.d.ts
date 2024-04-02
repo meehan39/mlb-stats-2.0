@@ -24,7 +24,7 @@ namespace Table {
         cells: Cell[];
         link?: string;
     }
-    type Cell = number | string;
+    type Cell = number | string | JSX.Element;
     type Alignment = 'left' | 'right' | 'center';
 }
 

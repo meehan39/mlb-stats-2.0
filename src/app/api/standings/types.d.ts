@@ -1,6 +1,7 @@
 import type { TeamKey } from '../../../constants/types';
 import type { LeagueData } from '../../../constants/types';
 import type { ResponseType } from 'axios';
+import type { PlayerStats } from '../utils/types';
 
 namespace Standings {
     type Data = {

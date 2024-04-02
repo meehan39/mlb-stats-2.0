@@ -134,8 +134,6 @@ namespace MlbApi {
         }
     }
 
-    interface;
-
     namespace LeagueLeaders {
         interface Leader {
             rank: number;
@@ -181,7 +179,136 @@ namespace MlbApi {
             leagueLeaders: LeaderCategory[];
         }
         interface Response extends ResponseType {
-            data;
+            data: Data;
+        }
+    }
+
+    namespace Schedule {
+        type TeamType = 'home' | 'away';
+        interface Response extends Response {
+            data: Data;
+        }
+        interface Data {
+            copyright: string;
+            totalItems: number;
+            totalEvents: number;
+            totalGames: number;
+            totalGamesInProgress: number;
+            dates: Date[];
+        }
+
+        interface Date {
+            date: string;
+            totalItems: number;
+            totalEvents: number;
+            totalGames: number;
+            totalGamesInProgress: number;
+            games: Game[];
+            events: any[];
+        }
+
+        interface Game {
+            gamePk: number;
+            gameGuid: string;
+            link: string;
+            gameType: string;
+            season: string;
+            gameDate: string;
+            officialDate: string;
+            status: {
+                abstractGameState: string;
+                codedGameState: string;
+                detailedState: string;
+                statusCode: string;
+                startTimeTBD: boolean;
+                abstractGameCode: string;
+            };
+            teams: {
+                [type in TeamType]: TeamInfo;
+            };
+            venue: {
+                id: number;
+                name: string;
+                link: string;
+            };
+            content: {
+                link: string;
+            };
+            gameNumber: number;
+            publicFacing: boolean;
+            doubleHeader: string;
+            gamedayType: string;
+            tiebreaker: string;
+            calendarEventID: string;
+            seasonDisplay: string;
+            dayNight: string;
+            scheduledInnings: number;
+            reverseHomeAwayStatus: boolean;
+            inningBreakLength: number;
+            gamesInSeries: number;
+            seriesGameNumber: number;
+            seriesDescription: string;
+            recordSource: string;
+            ifNecessary: string;
+            ifNecessaryDescription: string;
+        }
+
+        interface TeamInfo {
+            leagueRecord: {
+                wins: number;
+                losses: number;
+                pct: string;
+            };
+            score: number;
+            team: {
+                id: number;
+                name: string;
+                link: string;
+                springLeague?: {
+                    id: number;
+                    name: string;
+                    link: string;
+                    abbreviation: string;
+                };
+                allStarStatus?: string;
+                season?: number;
+                venue?: {
+                    id: number;
+                    name: string;
+                    link: string;
+                };
+                springVenue?: {
+                    id: number;
+                    link: string;
+                };
+                teamCode?: string;
+                fileCode?: string;
+                abbreviation?: string;
+                teamName?: string;
+                locationName?: string;
+                firstYearOfPlay?: string;
+                league?: {
+                    id: number;
+                    name: string;
+                    link: string;
+                };
+                division?: {
+                    id: number;
+                    name: string;
+                    link: string;
+                };
+                sport?: {
+                    id: number;
+                    name: string;
+                    link: string;
+                };
+                shortName?: string;
+                franchiseName?: string;
+                clubName?: string;
+                active?: boolean;
+            };
+            splitSquad: boolean;
+            seriesNumber: number;
         }
     }
 

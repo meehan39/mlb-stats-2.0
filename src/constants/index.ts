@@ -150,6 +150,8 @@ export const PATHS = {
         const { firstDay, lastDay } = getDateRange(month);
         return `/api/v1/stats/leaders?leaderCategories=homeRuns&statGroup=hitting&limit=50&statType=byDateRange&startDate=${firstDay}&endDate=${lastDay}`;
     },
+    SCHEDULE: (teamId: number) =>
+        `/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
 };
 
 const getDateRange = (month: TimeSpan) => {

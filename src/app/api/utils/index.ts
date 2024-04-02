@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { LEAGUE_DATA, MLB_BASE_API, PATHS } from '../../../constants';
 import queryString from 'querystring';
+import { LEAGUE_DATA, MLB_BASE_API, PATHS } from '../../../constants';
 import type { Player, TeamKey, TimeSpan } from '../../../constants/types';
 import type { PlayerStats } from './types';
 import type MlbApi from './MlbApi';
@@ -50,6 +50,7 @@ export const getRosterPromises = (
                     homeRuns:
                         playerData?.stats?.[0]?.splits?.[0]?.stat?.homeRuns ??
                         0,
+                    teamId: playerData?.currentTeam.id ?? -1,
                 };
                 resolve(stats);
             }),
