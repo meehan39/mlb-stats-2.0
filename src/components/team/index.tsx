@@ -11,26 +11,33 @@ import { getNextGamePromises } from '../../utils';
 
 import type Team from './types';
 import type TeamApi from '../../app/api/team/[teamKey]/types';
-import type TableTypes from '../table/types';
 import type NextGame from '../../app/api/nextGame/[teamId]/types';
 import type { PlayerStats } from '../../app/api/utils/types';
 import type { TeamKey } from '../../constants/types';
 
 export default function Team({ teamKey }: Team.Props) {
     const timeSpan = useAppSelector(selectTimeSpan);
-    const [rows, setRows]: [TableTypes.Row[], any] = useState([]);
+    const [rows, setRows]: [Team.Row[], any] = useState([]);
 
     useEffect(() => {
         const fetchTeam = async () => {
             const { data }: TeamApi.Response = await axios.get(
                 `/api/team/${teamKey}?timeSpan=${timeSpan}`,
             );
-            setRows(getRowsFromData(data));
-            if (timeSpan === 'season') {
+            const sortedData = data.sort((a, b) =>
+                a.homeRuns < b.homeRuns ? 1 : -1,
+            );
+            setRows(getRowsFromData(sortedData));
+            if (
+                timeSpan === 'season' ||
+                timeSpan === (new Date().getMonth() + 1).toString()
+            ) {
                 const nextGames = await Promise.all(
-                    getNextGamePromises(data.map(player => player.teamId)),
+                    getNextGamePromises(
+                        sortedData.map(player => player.teamId),
+                    ),
                 );
-                setRows(getRowsFromData(data, nextGames));
+                setRows(getRowsFromData(sortedData, nextGames));
             }
         };
         fetchTeam();
@@ -54,21 +61,15 @@ const getRowsFromData = (
     playerStats: PlayerStats[],
     nextGames: NextGame.Data[] | undefined = undefined,
 ) =>
-    playerStats
-        .sort((a, b) => (a.homeRuns < b.homeRuns ? 1 : -1))
-        .map(({ playerId, name, homeRuns }, index) => ({
-            link: `/player/${playerId}`,
-            cells: [
-                <PlayerCard
-                    key={name}
-                    name={name}
-                    nextGame={nextGames?.[index]}
-                />,
-                <span key={playerId} className='text-xl'>
-                    {homeRuns}
-                </span>,
-            ],
-        }));
+    playerStats.map(({ playerId, name, homeRuns }, index) => ({
+        link: `/player/${playerId}`,
+        cells: [
+            <PlayerCard key={name} name={name} nextGame={nextGames?.[index]} />,
+            <span key={playerId} className='text-xl'>
+                {homeRuns}
+            </span>,
+        ],
+    }));
 
 const formatTime = (timeStr: string) => {
     const date = new Date(timeStr);
