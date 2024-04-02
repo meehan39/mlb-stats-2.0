@@ -80,34 +80,46 @@ const formatTime = (timeStr: string) => {
     return `${hours ? hours : 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
 };
 
+const getState = (nextGame: NextGame.Game) => {
+    switch (nextGame.state) {
+        case 'live':
+            return (
+                <>
+                    <span className='text-green-600 dark:text-green-400'>
+                        LIVE
+                    </span>
+                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{nextGame.opponent}</span>
+                    <span>{nextGame.score}</span>
+                </>
+            );
+        case 'scheduled':
+            return (
+                <>
+                    <span>{formatTime(nextGame.startTime)}</span>
+                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{nextGame.opponent}</span>
+                </>
+            );
+        case 'final':
+            return (
+                <>
+                    <span>Final</span>
+                    <span>{nextGame.score}</span>
+                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{nextGame.opponent}</span>
+                </>
+            );
+        default:
+            return;
+    }
+};
+
 function PlayerCard({ name, nextGame }: Team.PlayerCard.Props) {
     return (
         <div>
             <span className='text-xl'>{name}</span>
-            {nextGame && (
-                <div className='flex gap-1'>
-                    {nextGame.state === 'live' ? (
-                        <>
-                            <span className='text-green-600 dark:text-green-400'>
-                                LIVE
-                            </span>
-                            <span>
-                                {nextGame.location === 'away' ? `@` : `vs`}
-                            </span>
-                            <span>{nextGame.opponent}</span>
-                            <span>{nextGame.score}</span>
-                        </>
-                    ) : (
-                        <>
-                            <span>{formatTime(nextGame.startTime)}</span>
-                            <span>
-                                {nextGame.location === 'away' ? `@` : `vs`}
-                            </span>
-                            <span>{nextGame.opponent}</span>
-                        </>
-                    )}
-                </div>
-            )}
+            {nextGame && <div className='flex gap-1'>{getState(nextGame)}</div>}
         </div>
     );
 }

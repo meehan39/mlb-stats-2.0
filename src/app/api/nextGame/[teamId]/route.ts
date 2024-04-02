@@ -16,10 +16,6 @@ export async function GET(
         );
         const nextGame = data?.dates?.[0]?.games?.[0];
 
-        if (!nextGame || nextGame.status.abstractGameState === 'Final') {
-            return Response.json(null);
-        }
-
         const [queried, opposing]: [
             MlbApi.Schedule.TeamType,
             MlbApi.Schedule.TeamType,
@@ -28,17 +24,17 @@ export async function GET(
                 ? ['home', 'away']
                 : ['away', 'home'];
 
-        const responseData: NextGame.Data = nextGame
-            ? {
+        const responseData = nextGame
+            ? ({
                   state:
-                      nextGame.status.abstractGameState === 'Live'
-                          ? 'live'
-                          : 'scheduled',
+                      { F: 'final', I: 'live' }[
+                          nextGame.status.codedGameState
+                      ] ?? 'scheduled',
                   opponent: nextGame.teams[opposing].team.abbreviation ?? '',
                   location: queried,
                   startTime: nextGame.gameDate,
                   score: `${nextGame.teams[queried].score}-${nextGame.teams[opposing].score}`,
-              }
+              } as NextGame.Game)
             : null;
         return Response.json(responseData);
     } catch (e) {

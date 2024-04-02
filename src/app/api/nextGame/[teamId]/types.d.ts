@@ -3,9 +3,10 @@ import type { ResponseType } from 'axios';
 namespace NextGame {
     type Data = Game | null;
     type Location = 'home' | 'away';
+    type State = 'live' | 'scheduled' | 'final';
 
     interface Game {
-        state: 'live' | 'scheduled';
+        state: StaticGenerationSearchParamsBailoutProvider;
         opponent: string;
         location: Location;
         startTime: string;
