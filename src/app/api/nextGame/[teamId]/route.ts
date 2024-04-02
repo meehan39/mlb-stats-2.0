@@ -38,6 +38,6 @@ export async function GET(
             : null;
         return Response.json(responseData);
     } catch (e) {
-        return new Response('Not found', { status: 404 });
+        return Response.json(null);
     }
 }
