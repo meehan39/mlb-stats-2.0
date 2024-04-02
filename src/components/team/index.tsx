@@ -26,10 +26,7 @@ export default function Team({ teamKey }: Team.Props) {
                 `/api/team/${teamKey}?timeSpan=${timeSpan}`,
             );
             setRows(getRowsFromData(data));
-            if (
-                timeSpan === 'season' ||
-                timeSpan === (new Date().getMonth() + 1).toString()
-            ) {
+            if (timeSpan === 'season') {
                 const nextGames = await Promise.all(
                     getNextGamePromises(data.map(player => player.teamId)),
                 );
