@@ -139,37 +139,36 @@ export const LEAGUE_DATA: LeagueData = {
 export const MLB_BASE_API = 'https://statsapi.mlb.com';
 
 export const PATHS = {
-    PLAYER_STATS: (playerId: number) =>
-        `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=season,season=${SEASON},sportId=1),currentTeam`,
-    MONTHLY_PLAYER_STATS: (playerId: number, month: TimeSpan) => {
-        const { firstDay, lastDay } = getDateRange(month);
-        return `/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,type=byDateRange,sportId=1,startDate=${firstDay},endDate=${lastDay}),currentTeam`;
-    },
-    LEAGUE_LEADERS: `/api/v1/stats/leaders?leaderCategories=homeRuns&season=${SEASON}&statGroup=hitting&limit=50`,
-    MONTHLY_LEAGUE_LEADERS: (month: TimeSpan) => {
-        const { firstDay, lastDay } = getDateRange(month);
-        return `/api/v1/stats/leaders?leaderCategories=homeRuns&statGroup=hitting&limit=50&statType=byDateRange&startDate=${firstDay}&endDate=${lastDay}`;
-    },
+    STATS: (playerId: number, timeSpan: TimeSpan = 'season') =>
+        `${MLB_BASE_API}/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,${
+            timeSpan === 'season'
+                ? `type=season,season=${SEASON}`
+                : `type=byDateRange,startDate=${getDay(timeSpan, Day.FIRST)},endDate=${getDay(timeSpan, Day.LAST)}`
+        },sportId=1),currentTeam`,
+    LEAGUE_LEADERS: (timeSpan: TimeSpan) =>
+        `${MLB_BASE_API}/api/v1/stats/leaders?leaderCategories=homeRuns${
+            timeSpan === 'season'
+                ? `&season=${SEASON}`
+                : `&statType=byDateRange&startDate=${getDay(timeSpan, Day.FIRST)}&endDate=${getDay(timeSpan, Day.LAST)}`
+        }&statGroup=hitting&limit=50`,
     SCHEDULE: (teamId: number) =>
         `/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
 };
 
-const getDateRange = (month: TimeSpan) => {
-    const firstDay = new Date(
-        parseInt(SEASON),
-        parseInt(month) - 1,
-        1,
+enum Day {
+    FIRST = 1,
+    LAST = 0,
+}
+
+const getDay = (timeSpan: TimeSpan, day: Day) =>
+    (timeSpan === 'today'
+        ? new Date()
+        : new Date(parseInt(SEASON), parseInt(timeSpan) - day, day)
     ).toLocaleDateString();
-    const lastDay = new Date(
-        parseInt(SEASON),
-        parseInt(month),
-        0,
-    ).toLocaleDateString();
-    return { firstDay, lastDay };
-};
 
 export const timeSpanValues = {
     season: 'Season',
+    today: 'Today',
     '3': 'March',
     '4': 'April',
     '5': 'May',

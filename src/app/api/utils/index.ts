@@ -1,6 +1,6 @@
 import axios from 'axios';
 import queryString from 'querystring';
-import { LEAGUE_DATA, MLB_BASE_API, PATHS } from '../../../constants';
+import { LEAGUE_DATA, PATHS } from '../../../constants';
 import type { Player, TeamKey, TimeSpan } from '../../../constants/types';
 import type { PlayerStats } from './types';
 import type MlbApi from './MlbApi';
@@ -9,12 +9,10 @@ export const getPlayerData = async (
     playerId: number,
     timeSpan: TimeSpan,
 ): Promise<MlbApi.PlayerStats.Player | null> => {
-    const url =
-        timeSpan === 'season'
-            ? `${MLB_BASE_API}${PATHS.PLAYER_STATS(playerId)}`
-            : `${MLB_BASE_API}${PATHS.MONTHLY_PLAYER_STATS(playerId, timeSpan)}`;
     try {
-        const response: MlbApi.PlayerStats.Response = await axios.get(url);
+        const response: MlbApi.PlayerStats.Response = await axios.get(
+            PATHS.STATS(playerId, timeSpan),
+        );
         return response.data.people[0];
     } catch {
         return null;
@@ -24,12 +22,10 @@ export const getPlayerData = async (
 export const getLeagueLeaders = async (
     timeSpan: TimeSpan,
 ): Promise<MlbApi.LeagueLeaders.Leader[] | null> => {
-    const url =
-        timeSpan === 'season'
-            ? `${MLB_BASE_API}${PATHS.LEAGUE_LEADERS}`
-            : `${MLB_BASE_API}${PATHS.MONTHLY_LEAGUE_LEADERS(timeSpan)}`;
     try {
-        const response: MlbApi.LeagueLeaders.Response = await axios.get(url);
+        const response: MlbApi.LeagueLeaders.Response = await axios.get(
+            PATHS.LEAGUE_LEADERS(timeSpan),
+        );
         return response.data.leagueLeaders[0].leaders;
     } catch {
         return null;

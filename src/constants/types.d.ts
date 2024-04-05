@@ -26,4 +26,13 @@ export type LeagueData = {
     [key in TeamKey]: Team;
 };
 
-export type TimeSpan = 'season' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+export type TimeSpan =
+    | 'season'
+    | 'today'
+    | '3'
+    | '4'
+    | '5'
+    | '6'
+    | '7'
+    | '8'
+    | '9';
