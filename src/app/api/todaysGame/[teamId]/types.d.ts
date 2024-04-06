@@ -1,6 +1,6 @@
 import type { ResponseType } from 'axios';
 
-namespace NextGame {
+namespace TodaysGame {
     type Data = Game | null;
     type Location = 'home' | 'away';
     type State = 'live' | 'scheduled' | 'final';
@@ -11,6 +11,7 @@ namespace NextGame {
         location: Location;
         startTime: string;
         score: string;
+        homeRuns: number;
     }
 
     interface Response extends ResponseType {
@@ -18,4 +19,4 @@ namespace NextGame {
     }
 }
 
-export default NextGame;
+export default TodaysGame;

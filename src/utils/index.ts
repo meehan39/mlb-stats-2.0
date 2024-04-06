@@ -1,14 +1,15 @@
 import axios from './axios';
-import NextGame from '../app/api/nextGame/[teamId]/types';
+import TodaysGame from '../app/api/todaysGame/[teamId]/types';
+import type { TodayGameData } from './types';
 
-export const getNextGamePromises = (
-    teamIds: number[],
-): Promise<NextGame.Data>[] =>
-    teamIds.map(
-        teamId =>
-            new Promise<NextGame.Data>(async resolve => {
-                const { data }: NextGame.Response = await axios.get(
-                    `/api/nextGame/${teamId}`,
+export const getTodaysGamePromises = (
+    todaysGames: TodayGameData[],
+): Promise<TodaysGame.Data>[] =>
+    todaysGames.map(
+        game =>
+            new Promise<TodaysGame.Data>(async resolve => {
+                const { data }: TodaysGame.Response = await axios.get(
+                    `/api/todaysGame/${game.teamId}${game.playerId && `?playerId=${game.playerId}`}`,
                 );
                 resolve(data);
             }),

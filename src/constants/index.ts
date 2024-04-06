@@ -152,7 +152,9 @@ export const PATHS = {
                 : `&statType=byDateRange&startDate=${getDay(timeSpan, Day.FIRST)}&endDate=${getDay(timeSpan, Day.LAST)}`
         }&statGroup=hitting&limit=50`,
     SCHEDULE: (teamId: number) =>
-        `/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
+        `${MLB_BASE_API}/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
+    GAME_STATS: (playerId: number, gameId: number) =>
+        `${MLB_BASE_API}/api/v1/people/${playerId}/stats/game/${gameId}?group=hitting`,
 };
 
 enum Day {
@@ -161,14 +163,14 @@ enum Day {
 }
 
 const getDay = (timeSpan: TimeSpan, day: Day) =>
-    (timeSpan === 'today'
-        ? new Date()
-        : new Date(parseInt(SEASON), parseInt(timeSpan) - day, day)
+    new Date(
+        parseInt(SEASON),
+        parseInt(timeSpan) - day,
+        day,
     ).toLocaleDateString();
 
 export const timeSpanValues = {
     season: 'Season',
-    today: 'Today',
     '3': 'March',
     '4': 'April',
     '5': 'May',

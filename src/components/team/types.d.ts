@@ -1,4 +1,4 @@
-import type NextGame from '../../app/api/nextGame/[teamId]/types';
+import type TodaysGame from '../../app/api/todaysGame/[teamId]/types';
 import type Table from '../table/types';
 
 namespace Team {
@@ -7,13 +7,13 @@ namespace Team {
     }
 
     interface Row extends Table.Row {
-        nextGame?: NextGame.Data;
+        todaysGame?: TodaysGame.Data;
     }
 
     namespace PlayerCard {
         interface Props {
             name: string;
-            nextGame?: NextGame.Data;
+            todaysGame?: TodaysGame.Data;
         }
     }
 }

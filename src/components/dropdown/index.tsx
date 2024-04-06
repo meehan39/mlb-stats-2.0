@@ -12,7 +12,7 @@ export default function TimeSpanDropdown() {
         { length: new Date().getMonth() - 1 },
         (_, index) => (3 + index).toString() as TimeSpan,
     )
-        .concat(['today', 'season'])
+        .concat(['season'])
         .reverse();
     const timeSpan = useAppSelector(selectTimeSpan);
     const dispatch = useAppDispatch();

@@ -7,11 +7,11 @@ import { LEAGUE_DATA } from '../../constants';
 import { useAppSelector } from '../../lib/hooks';
 import { selectTimeSpan } from '../../lib/timeSpan/slice';
 import { useEffect, useState } from 'react';
-import { getNextGamePromises } from '../../utils';
+import { getTodaysGamePromises } from '../../utils';
 
 import type Team from './types';
 import type TeamApi from '../../app/api/team/[teamKey]/types';
-import type NextGame from '../../app/api/nextGame/[teamId]/types';
+import type TodaysGame from '../../app/api/todaysGame/[teamId]/types';
 import type { PlayerStats } from '../../app/api/utils/types';
 import type { TeamKey } from '../../constants/types';
 
@@ -32,12 +32,15 @@ export default function Team({ teamKey }: Team.Props) {
                 timeSpan === 'season' ||
                 timeSpan === (new Date().getMonth() + 1).toString()
             ) {
-                const nextGames = await Promise.all(
-                    getNextGamePromises(
-                        sortedData.map(player => player.teamId),
+                const todaysGames = await Promise.all(
+                    getTodaysGamePromises(
+                        sortedData.map(player => ({
+                            teamId: player.teamId,
+                            playerId: player.playerId,
+                        })),
                     ),
                 );
-                setRows(getRowsFromData(sortedData, nextGames));
+                setRows(getRowsFromData(sortedData, todaysGames));
             }
         };
         fetchTeam();
@@ -59,12 +62,16 @@ export default function Team({ teamKey }: Team.Props) {
 
 const getRowsFromData = (
     playerStats: PlayerStats[],
-    nextGames: NextGame.Data[] | undefined = undefined,
+    todaysGames: TodaysGame.Data[] | undefined = undefined,
 ) =>
     playerStats.map(({ playerId, name, homeRuns }, index) => ({
         link: `/player/${playerId}`,
         cells: [
-            <PlayerCard key={name} name={name} nextGame={nextGames?.[index]} />,
+            <PlayerCard
+                key={name}
+                name={name}
+                todaysGame={todaysGames?.[index]}
+            />,
             <span key={playerId} className='text-xl'>
                 {homeRuns}
             </span>,
@@ -80,34 +87,36 @@ const formatTime = (timeStr: string) => {
     return `${hours ? hours : 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
 };
 
-const getState = (nextGame: NextGame.Game) => {
-    switch (nextGame.state) {
+const getState = (todaysGame: TodaysGame.Game) => {
+    switch (todaysGame.state) {
         case 'live':
             return (
                 <>
                     <span className='text-green-600 dark:text-green-400'>
                         LIVE
                     </span>
-                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
-                    <span>{nextGame.opponent}</span>
-                    <span>{nextGame.score}</span>
+                    <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{todaysGame.opponent}</span>
+                    <span>{todaysGame.score},</span>
+                    <span>{todaysGame.homeRuns} HR</span>
                 </>
             );
         case 'scheduled':
             return (
                 <>
-                    <span>{formatTime(nextGame.startTime)}</span>
-                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
-                    <span>{nextGame.opponent}</span>
+                    <span>{formatTime(todaysGame.startTime)}</span>
+                    <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{todaysGame.opponent}</span>
                 </>
             );
         case 'final':
             return (
                 <>
                     <span>Final</span>
-                    <span>{nextGame.score}</span>
-                    <span>{nextGame.location === 'away' ? `@` : `vs`}</span>
-                    <span>{nextGame.opponent}</span>
+                    <span>{todaysGame.score}</span>
+                    <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
+                    <span>{todaysGame.opponent},</span>
+                    <span>{todaysGame.homeRuns} HR</span>
                 </>
             );
         default:
@@ -115,11 +124,13 @@ const getState = (nextGame: NextGame.Game) => {
     }
 };
 
-function PlayerCard({ name, nextGame }: Team.PlayerCard.Props) {
+function PlayerCard({ name, todaysGame: todaysGame }: Team.PlayerCard.Props) {
     return (
         <div>
             <span className='text-xl'>{name}</span>
-            {nextGame && <div className='flex gap-1'>{getState(nextGame)}</div>}
+            {todaysGame && (
+                <div className='flex gap-1'>{getState(todaysGame)}</div>
+            )}
         </div>
     );
 }

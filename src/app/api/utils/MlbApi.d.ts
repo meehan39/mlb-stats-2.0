@@ -312,6 +312,166 @@ namespace MlbApi {
         }
     }
 
+    namespace GameStats {
+        interface CallDetails {
+            code: string;
+            description: string;
+        }
+
+        interface PitchType {
+            code: string;
+            description: string;
+        }
+
+        interface PlayDetails {
+            call: CallDetails;
+            description: string;
+            code: string;
+            ballColor: string;
+            trailColor: string;
+            isInPlay: boolean;
+            isStrike: boolean;
+            isBall: boolean;
+            type: PitchType;
+            awayScore: number;
+            homeScore: number;
+            isOut: boolean;
+            hasReview: boolean;
+            runnerGoing?: boolean;
+        }
+
+        interface Coordinates {
+            aY: number;
+            aZ: number;
+            pfxX: number;
+            pfxZ: number;
+            pX: number;
+            pZ: number;
+            vX0: number;
+            vY0: number;
+            vZ0: number;
+            x: number;
+            y: number;
+            x0: number;
+            y0: number;
+            z0: number;
+            aX: number;
+        }
+
+        interface Breaks {
+            breakAngle: number;
+            breakLength: number;
+            breakY: number;
+            breakVertical: number;
+            breakVerticalInduced: number;
+            breakHorizontal: number;
+            spinRate: number;
+            spinDirection: number;
+        }
+
+        interface PitchData {
+            startSpeed: number;
+            endSpeed: number;
+            strikeZoneTop: number;
+            strikeZoneBottom: number;
+            coordinates: Coordinates;
+            breaks: Breaks;
+            zone: number;
+            typeConfidence: number;
+            plateTime: number;
+            extension: number;
+        }
+
+        interface HitData {
+            launchSpeed: number;
+            launchAngle: number;
+            totalDistance: number;
+            trajectory: string;
+            hardness: string;
+            location: string;
+            coordinates: {
+                coordX: number;
+                coordY: number;
+            };
+        }
+
+        interface Play {
+            details: PlayDetails;
+            count: {
+                balls: number;
+                strikes: number;
+                outs: number;
+                inning: number;
+            };
+            pitchData: PitchData;
+            hitData?: HitData;
+            index: number;
+            playId: string;
+            pitchNumber: number;
+            startTime: string;
+            endTime: string;
+            isPitch: boolean;
+            type: string;
+        }
+
+        interface Stat {
+            play?: Play;
+            summary?: string;
+            gamesPlayed?: number;
+            flyOuts?: number;
+            groundOuts?: number;
+            runs?: number;
+            doubles?: number;
+            triples?: number;
+            homeRuns?: number;
+            strikeOuts?: number;
+            baseOnBalls?: number;
+            intentionalWalks?: number;
+            hits?: number;
+            hitByPitch?: number;
+            atBats?: number;
+            caughtStealing?: number;
+            stolenBases?: number;
+            stolenBasePercentage?: string;
+            groundIntoDoublePlay?: number;
+            groundIntoTriplePlay?: number;
+            plateAppearances?: number;
+            totalBases?: number;
+            rbi?: number;
+            leftOnBase?: number;
+            sacBunts?: number;
+            sacFlies?: number;
+            catchersInterference?: number;
+            pickoffs?: number;
+            atBatsPerHomeRun?: string;
+        }
+
+        interface StatSplit {
+            stat?: Stat;
+        }
+
+        interface Stats {
+            type?: {
+                displayName: string;
+            };
+            group?: {
+                displayName: string;
+            };
+            totalSplits?: number;
+            exemptions: any[];
+            splits: StatSplit[];
+        }
+
+        interface Data {
+            copyright: string;
+            stats: Stats[];
+        }
+
+        interface Response extends ResponseType {
+            data: Data;
+        }
+    }
+
 }
 
 export default MlbApi;
