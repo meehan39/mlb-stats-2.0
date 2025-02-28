@@ -55,6 +55,7 @@ export default function Team({ teamKey }: Team.Props) {
                     { text: 'Home Runs', align: 'right' },
                 ]}
                 rows={rows}
+                loadingRows={6}
             />
         </>
     );
@@ -124,13 +125,20 @@ const getState = (todaysGame: TodaysGame.Game) => {
     }
 };
 
-function PlayerCard({ name, todaysGame: todaysGame }: Team.PlayerCard.Props) {
+function PlayerCard({ name, todaysGame }: Team.PlayerCard.Props) {
     return (
         <div>
             <span className='text-xl'>{name}</span>
-            {todaysGame && (
-                <div className='flex gap-1'>{getState(todaysGame)}</div>
-            )}
+            {
+                <div
+                    className={
+                        todaysGame
+                            ? 'flex gap-1 h-4'
+                            : 'h-2 bg-gray-200 rounded-full dark:bg-gray-700 max-w-[180px] mt-2'
+                    }>
+                    {todaysGame && getState(todaysGame)}
+                </div>
+            }
         </div>
     );
 }

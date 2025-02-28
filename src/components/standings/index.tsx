@@ -75,6 +75,7 @@ export default function Standings() {
                     { text: 'Total', align: 'right', sort: totalSort },
                 ]}
                 rows={rows}
+                loadingRows={Object.keys(LEAGUE_DATA).length}
             />
         </>
     );

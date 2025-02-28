@@ -10,7 +10,8 @@ export type TeamKey =
     | 'crog'
     | 'nico'
     | 'meehan'
-    | 'verdi';
+    | 'verdi'
+    | 'carita';
 
 export interface Player {
     name: string;

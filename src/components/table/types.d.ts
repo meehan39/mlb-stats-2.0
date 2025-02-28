@@ -3,10 +3,12 @@ namespace Table {
         hideHeader?: boolean;
         headers: Header[];
         rows: Row[];
+        loadingRows: number;
     }
     namespace TBody {
         interface Props {
             rows: Row[];
+            loadingRows: number;
             alignments: Alignment[];
         }
     }

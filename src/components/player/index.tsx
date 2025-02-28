@@ -63,6 +63,7 @@ export default function Player({ playerId }: PlayerComponent.Props) {
                     { text: 'value', align: 'right' },
                 ]}
                 rows={rows}
+                loadingRows={20}
             />
         </>
     );

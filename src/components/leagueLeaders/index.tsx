@@ -46,6 +46,7 @@ export default function LeagueLeaders() {
                     { text: 'HRs', align: 'right' },
                 ]}
                 rows={rows}
+                loadingRows={20}
             />
         </>
     );

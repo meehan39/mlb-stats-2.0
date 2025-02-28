@@ -11,7 +11,6 @@ export async function GET(
     request: Request,
     { params }: { params: { teamId: string } },
 ) {
-    console.log(request.url);
     try {
         const playerId = parseQueryString(request.url)?.playerId as string;
         const { data }: MlbApi.Schedule.Response = await axios.get(
