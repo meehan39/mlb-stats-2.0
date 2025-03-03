@@ -37,35 +37,36 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
   }, [rowProps]);
   return (
     <tbody className='divide-y divide-slate-100 dark:divide-slate-950'>
-      {rows.length
-        ? rows.map(({ cells, link }, index) => (
+      {(rows.length ? rows : Array.from({ length: loadingRows })).map(
+        (item, index) => {
+          const { cells, link } = (item as Table.Row) ?? {};
+          console.log(alignments);
+          return (
             <tr
               key={index}
               className={`bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 ${link && 'cursor-pointer'}`}
               onClick={
                 link ? () => router.push(link, { scroll: false }) : undefined
               }>
-              {cells.map((cell, index) => (
+              {alignments.map((align, index) => (
                 <td
                   key={index}
-                  className={`p-3 ${alignments[index] === 'right' ? 'text-right' : 'text-left'}`}>
-                  {cell}
+                  className={`p-3 ${align === 'right' ? 'text-right' : 'text-left'}`}>
+                  {
+                    <Loading
+                      isLoading={!cells}
+                      text='sm'
+                      width='w-16'
+                      align={align}>
+                      {cells?.[index]}
+                    </Loading>
+                  }
                 </td>
               ))}
             </tr>
-          ))
-        : Array.from({ length: loadingRows }).map((_, index) => (
-            <tr key={index} className='bg-slate-200 dark:bg-slate-800'>
-              {alignments.map((align, index) => (
-                <td key={index}>
-                  <div
-                    className={`p-4 flex ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
-                    <Loading isLoading height='h-2.5' width='w-16' />
-                  </div>
-                </td>
-              ))}
-            </tr>
-          ))}
+          );
+        },
+      )}
     </tbody>
   );
 }

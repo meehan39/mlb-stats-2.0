@@ -22,9 +22,25 @@ export default function Loading({
   mdText,
   height,
   width,
+  align,
   children,
 }: Loading.Props) {
   return isLoading ? (
-    <div className={`animate-pulse rounded-full bg-slate-300 dark:bg-slate-700 ${text && textConfig[text]} ${mdText && mdTextConfig[mdText]} ${!text && height} ${width}`}></div>
-  ) : children;
+    <div
+      className={`w-full flex justify-start ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
+      <div
+        className={`
+        animate-pulse
+        rounded-full
+        bg-slate-300 dark:bg-slate-700
+        ${text && textConfig[text]}
+        ${mdText && mdTextConfig[mdText]}
+        ${!text && height}
+        ${width}
+      `}
+      />
+    </div>
+  ) : (
+    children
+  );
 }
