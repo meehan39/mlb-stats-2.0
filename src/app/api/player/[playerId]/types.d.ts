@@ -3,11 +3,20 @@ import type { ResponseType } from 'axios';
 
 namespace Player {
     interface Data {
-        fullName: string;
-        owner: TeamKey | null;
-        currentTeam: string;
-        position: string;
-        bats: string;
+        meta: {
+            playerId: number;
+            fullName: string;
+            owner: TeamKey | null;
+            teamName: string;
+            teamId: number;
+            position: string;
+            bats: string;
+            primaryNumber: string;
+            height: string;
+            weight: number;
+            currentAge: number;
+            mlbDebutDate: string;
+        };
         gamesPlayed?: number;
         atBats?: number;
         plateAppearances?: number;
@@ -25,9 +34,7 @@ namespace Player {
         ops?: string;
     }
 
-    interface Response extends ResponseType {
-        data: Data;
-    }
+    type Response = Data;
 }
 
 export default Player;

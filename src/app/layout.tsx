@@ -19,12 +19,10 @@ export default function RootLayout({
     return (
         <html lang='en'>
             <body
-                className={`${inter.className} flex justify-center content-stretch`}>
-                <main className='flex flex-col items-center justify-start p-4 min-h-[calc(100dvh)] max-w-[calc(100dvw)] flex-1'>
-                    <StoreProvider>
-                        <Header />
-                        {children}
-                    </StoreProvider>
+                className={`${inter.className} flex flex-col justify-center items-center content-stretch`}>
+                <Header />
+                <main className='flex flex-col items-center justify-start min-h-[calc(100dvh)] w-full max-w-4xl flex-1'>
+                    <StoreProvider>{children}</StoreProvider>
                 </main>
             </body>
         </html>

@@ -1,7 +1,6 @@
 'use client';
 import axios from '../../utils/axios';
 import Subheader from '../subheader';
-import { LEAGUE_DATA } from '../../constants';
 import Table from '../table';
 import { useAppSelector } from '../../lib/hooks';
 import { selectTimeSpan } from '../../lib/timeSpan/slice';
@@ -10,30 +9,28 @@ import { useState, useEffect } from 'react';
 import type PlayerApi from '../../app/api/player/[playerId]/types';
 import type PlayerComponent from './types';
 import type TableTypes from '../table/types';
+import Hero from './hero';
 
 export default function Player({ playerId }: PlayerComponent.Props) {
     const timeSpan = useAppSelector(selectTimeSpan);
-    const [rows, setRows]: [TableTypes.Row[], any] = useState([]);
+    const [rows, setRows] = useState<TableTypes.Row[]>([]);
+    const [hero, setHero] = useState<PlayerComponent.Hero.Props>({
+        loading: true,
+    });
     const [subheadertext, setSubheaderText] = useState('');
 
     useEffect(() => {
         const fetchPlayer = async () => {
-            const { data }: PlayerApi.Response = await axios.get(
+            const { data } = await axios.get<PlayerApi.Response>(
                 `/api/player/${playerId}?timeSpan=${timeSpan}`,
             );
-            const owner = data.owner
-                ? LEAGUE_DATA[data.owner].teamName
-                : 'None';
-            setSubheaderText(data.fullName);
+            setSubheaderText(data.meta.fullName);
+            setHero({
+                loading: false,
+                ...data.meta,
+            });
             setRows([
-                {
-                    cells: ['Owner', owner],
-                    link: data.owner ? `/team/${data.owner}` : undefined,
-                },
                 { cells: ['HR', data?.homeRuns ?? '0'] },
-                { cells: ['Team', data?.currentTeam ?? ''] },
-                { cells: ['Pos.', data?.position ?? ''] },
-                { cells: ['Bats', data?.bats ?? ''] },
                 { cells: ['GP', data?.gamesPlayed ?? '0'] },
                 { cells: ['AB', data?.atBats ?? '0'] },
                 { cells: ['PA', data?.plateAppearances ?? '0'] },
@@ -56,6 +53,7 @@ export default function Player({ playerId }: PlayerComponent.Props) {
     return (
         <>
             <Subheader text={subheadertext} />
+            <Hero {...hero} />
             <Table
                 hideHeader={true}
                 headers={[

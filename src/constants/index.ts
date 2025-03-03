@@ -167,6 +167,12 @@ export const PATHS = {
         `${MLB_BASE_API}/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
     GAME_STATS: (playerId: number, gameId: number) =>
         `${MLB_BASE_API}/api/v1/people/${playerId}/stats/game/${gameId}?group=hitting`,
+    PLAYER_HERO_IMAGE: (playerId: number) =>
+        `https://securea.mlb.com/mlb/images/players/head_shot/${playerId}.jpg`,
+    PLAYER_ICON_IMAGE: (playerId: number) =>
+        `https://midfield.mlbstatic.com/v1/people/${playerId}/spots/60`,
+    TEAM_LOGO: (teamId: number) =>
+        `https://midfield.mlbstatic.com/v1/team/${teamId}/spots/72`,
 };
 
 enum Day {

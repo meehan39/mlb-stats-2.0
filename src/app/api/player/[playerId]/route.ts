@@ -15,12 +15,32 @@ export async function GET(
         if (!player) {
             throw new Error();
         }
+        const {
+            fullName,
+            currentTeam,
+            primaryNumber,
+            primaryPosition,
+            height,
+            weight,
+            batSide,
+            currentAge,
+            mlbDebutDate,
+        } = player;
         const responseData: Player.Data = {
-            fullName: player.fullName,
-            owner: getOwner(playerId),
-            currentTeam: player.currentTeam.name,
-            position: player.primaryPosition.name,
-            bats: player.batSide.description,
+            meta: {
+                playerId,
+                fullName,
+                primaryNumber,
+                height,
+                weight,
+                currentAge,
+                mlbDebutDate,
+                owner: getOwner(playerId),
+                teamId: currentTeam.id,
+                teamName: currentTeam.name,
+                position: primaryPosition.abbreviation,
+                bats: batSide.description,
+            },
             ...player?.stats?.[0]?.splits?.[0]?.stat,
         };
         return Response.json(responseData);
