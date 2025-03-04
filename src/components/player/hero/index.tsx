@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Loading from '../../loading';
 import { LEAGUE_DATA, PATHS } from '../../../constants';
 import type { TeamKey } from '../../../constants/types';
-import type { Text } from '../../loading/types';
+import Card from '../card';
 
 export default function Hero({
   loading,
@@ -21,46 +21,6 @@ export default function Hero({
   currentAge,
   mlbDebutDate,
 }: PlayerComponent.Hero.Props) {
-
-  function HeroCard({
-    label,
-    hidable,
-    text,
-    fillWidth,
-    children,
-  }: PlayerComponent.Hero.Card.Props) {
-    const loadingText: { text: Text; mdText: Text } | null = text
-      ? { text: 'xl', mdText: '2xl' }
-      : null;
-    return (
-      <div
-        className={`
-        ${hidable ? 'hidden md:flex' : 'flex'}
-        ${fillWidth ? 'md:w-full' : 'md:w-auto'}
-        h-20 w-full md:w-auto
-        flex-col justify-center gap-2 items-center
-        rounded-xl p-2 md:px-4 whitespace-nowrap
-        bg-slate-200 dark:bg-slate-800
-        shadow-black/50
-        shadow
-      `}>
-        <span className='text-sm font-medium'>{label}</span>
-        <Loading
-          isLoading={loading}
-          text={text ? loadingText?.text : undefined}
-          mdText={text ? loadingText?.mdText : undefined}
-          height={!text ? 'h-10' : undefined}
-          width='w-full'>
-          {text ? (
-            <span className='text-xl md:text-2xl'>{children}</span>
-          ) : (
-            children
-          )}
-        </Loading>
-      </div>
-    );
-  }
-
   return (
     <div className='flex w-full justify-center md:justify-start'>
       <div className='my-2 flex max-w-lg flex-row items-stretch rounded-xl px-4 py-4 text-left md:max-w-xl'>
@@ -99,7 +59,7 @@ export default function Hero({
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex gap-2 md:gap-4'>
-              <HeroCard label='Team' hidable>
+              <Card label='Team' hidable loading={loading}>
                 {teamId && (
                   <Image
                     src={PATHS.TEAM_LOGO(teamId)}
@@ -109,27 +69,27 @@ export default function Hero({
                     className='rounded-full h-8 w-8'
                   />
                 )}
-              </HeroCard>
-              <HeroCard label='Position' text>
+              </Card>
+              <Card label='Position' isText loading={loading}>
                 {position}
-              </HeroCard>
-              <HeroCard label='Bats' text>
+              </Card>
+              <Card label='Bats' isText loading={loading}>
                 {bats && bats.slice(0, 1)}
-              </HeroCard>
-              <HeroCard label='Age' text>
+              </Card>
+              <Card label='Age' isText loading={loading}>
                 {currentAge?.toString()}
-              </HeroCard>
+              </Card>
             </div>
             <div className='flex gap-2 md:gap-4'>
-              <HeroCard label='Height' hidable text>
+              <Card label='Height' hidable isText loading={loading}>
                 {height}
-              </HeroCard>
-              <HeroCard label='Weight' hidable text>
+              </Card>
+              <Card label='Weight' hidable isText loading={loading}>
                 {weight}
-              </HeroCard>
-              <HeroCard label='MLB Debut' fillWidth text>
+              </Card>
+              <Card label='MLB Debut' fillWidth isText loading={loading}>
                 {mlbDebutDate && mlbDebutDate.slice(0, 4)}
-              </HeroCard>
+              </Card>
             </div>
           </div>
         </div>

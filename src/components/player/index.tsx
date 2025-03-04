@@ -1,7 +1,7 @@
 'use client';
 import axios from '../../utils/axios';
 import Subheader from '../subheader';
-import Table from '../table';
+import Stats from './stats';
 import { useAppSelector } from '../../lib/hooks';
 import { selectTimeSpan } from '../../lib/timeSpan/slice';
 import { useState, useEffect } from 'react';
@@ -13,7 +13,9 @@ import Hero from './hero';
 
 export default function Player({ playerId }: PlayerComponent.Props) {
   const timeSpan = useAppSelector(selectTimeSpan);
-  const [rows, setRows] = useState<TableTypes.Row[]>([]);
+  const [stats, setStats] = useState<PlayerComponent.Stats.Props>({
+    loading: true,
+  });
   const [hero, setHero] = useState<PlayerComponent.Hero.Props>({
     loading: true,
   });
@@ -24,28 +26,16 @@ export default function Player({ playerId }: PlayerComponent.Props) {
       const { data } = await axios.get<PlayerApi.Response>(
         `/api/player/${playerId}?timeSpan=${timeSpan}`,
       );
-      setSubheaderText(data.meta.fullName);
+      const { meta, ...stats } = data;
+      setSubheaderText(meta.fullName);
       setHero({
         loading: false,
-        ...data.meta,
+        ...meta,
       });
-      setRows([
-        { cells: ['HR', data?.homeRuns ?? '0'] },
-        { cells: ['GP', data?.gamesPlayed ?? '0'] },
-        { cells: ['AB', data?.atBats ?? '0'] },
-        { cells: ['PA', data?.plateAppearances ?? '0'] },
-        { cells: ['Hits', data?.hits ?? '0'] },
-        { cells: ['Runs', data?.runs ?? '0'] },
-        { cells: ['RBI', data?.rbi ?? '0'] },
-        { cells: ['Avg.', data?.avg ?? '.000'] },
-        { cells: ['BB', data?.baseOnBalls ?? '0'] },
-        { cells: ['2B', data?.doubles ?? '0'] },
-        { cells: ['3B', data?.triples ?? '0'] },
-        { cells: ['SO', data?.strikeOuts ?? '0'] },
-        { cells: ['OBP', data?.obp ?? '.000'] },
-        { cells: ['SLG', data?.slg ?? '.000'] },
-        { cells: ['OPS', data?.ops ?? '.000'] },
-      ]);
+      setStats({
+        loading: false,
+        ...stats,
+      });
     };
     fetchPlayer();
   }, [timeSpan, playerId]);
@@ -55,12 +45,7 @@ export default function Player({ playerId }: PlayerComponent.Props) {
       <Subheader text={subheadertext} />
       <div className='flex flex-col items-center gap-4 w-full max-w-4xl'>
         <Hero {...hero} />
-        <Table
-          hideHeader={true}
-          headers={[{ text: 'category' }, { text: 'value', align: 'right' }]}
-          rows={rows}
-          loadingRows={20}
-        />
+        <Stats {...stats} />
       </div>
     </>
   );
