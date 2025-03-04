@@ -1,6 +1,6 @@
 namespace Subheader {
     interface Props {
-        text: string;
+      text: string | null;
     }
     namespace Icon {
         interface Props {

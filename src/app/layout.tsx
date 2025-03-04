@@ -17,14 +17,14 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang='en'>
-            <body
-                className={`${inter.className} flex flex-col justify-center items-center content-stretch`}>
-                <Header />
-                <main className='flex flex-col items-center justify-start min-h-[calc(100dvh)] w-full max-w-4xl flex-1'>
-                    <StoreProvider>{children}</StoreProvider>
-                </main>
-            </body>
-        </html>
+      <html lang='en'>
+        <body
+          className={`${inter.className} flex flex-col justify-center items-center content-stretch font-medium`}>
+          <Header />
+          <main className='flex flex-col items-center justify-start min-h-[calc(100dvh)] w-full flex-1'>
+            <StoreProvider>{children}</StoreProvider>
+          </main>
+        </body>
+      </html>
     );
 }
