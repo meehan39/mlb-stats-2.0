@@ -34,7 +34,7 @@ export default function Hero({
             alt={fullName ?? 'Generic player avatar'}
             width={100}
             height={150}
-            className='h-56 w-32 rounded-lg object-cover shadow shadow-black/50'
+            className='h-56 w-32 rounded-lg object-cover raised'
           />
         </div>
         <div className='flex flex-col justify-between gap-2'>

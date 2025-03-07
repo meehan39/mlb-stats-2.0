@@ -1,13 +1,10 @@
 namespace Subheader {
+  namespace Icon {
     interface Props {
-      text: string | null;
+      path: string;
+      children: JSX.Element;
     }
-    namespace Icon {
-        interface Props {
-            path: string;
-            children: JSX.Element;
-        }
-    }
+  }
 }
 
 export default Subheader;

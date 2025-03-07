@@ -17,7 +17,7 @@ export default function Table({
   }, [rowProps]);
 
   return (
-    <table className='table-auto w-full text-sm max-w-4xl md:my-6 md:rounded-xl overflow-clip shadow shadow-black/50 dark:shadow-slate-900 ring-2 ring-slate-300 dark:ring-slate-600'>
+    <table className='table-auto w-full text-sm max-w-4xl md:my-6 md:rounded-xl overflow-clip raised ring-2 ring-slate-300 dark:ring-slate-600'>
       {!hideHeader && <THead headers={headers} />}
       <TBody
         rows={rows}
@@ -71,7 +71,7 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
 
 function THead({ headers }: Table.THead.Props) {
   return (
-    <thead className='sticky top-16 table-header-group bg-slate-400 dark:bg-slate-900 shadow shadow-black/50 z-0'>
+    <thead className='sticky top-16 table-header-group bg-slate-400 dark:bg-slate-900 raised z-0'>
       <tr>
         {headers.map(({ text, align, sort }, index) => (
           <th

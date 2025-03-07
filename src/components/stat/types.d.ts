@@ -10,4 +10,4 @@ namespace Stat {
 
 export type Text = 'sm' | 'md' | 'lg' | 'xl' | '2xl';
 
-export default Loading;
+export default Stat;

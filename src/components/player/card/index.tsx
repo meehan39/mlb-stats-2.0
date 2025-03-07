@@ -27,8 +27,7 @@ import type { Text } from "../../loading/types";
         justify-between gap-2 items-center
         rounded-xl whitespace-nowrap
         bg-slate-200 dark:bg-slate-800
-        shadow-black/50
-        shadow
+        raised
       `}>
         <span className={`${isXL ? 'text-xl sm:text-2xl' : 'text-sm'}`}>
           {label}

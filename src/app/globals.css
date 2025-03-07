@@ -40,10 +40,14 @@ body {
     @apply text-gray-700 dark:text-gray-400;
   }
   .card {
-    @apply rounded-lg p-2 bg-slate-200 dark:bg-slate-800 shadow-black/50 shadow flex gap-4;
+    @apply rounded-lg p-2 bg-slate-200 dark:bg-slate-800 raised flex gap-4;
   }
   .clickable-card {
     @apply card;
     @apply cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-700;
+  }
+
+  .raised {
+    @apply shadow-black/50 shadow;
   }
 }

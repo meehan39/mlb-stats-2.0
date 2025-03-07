@@ -5,8 +5,12 @@ import Loading from '../loading';
 import { HomeIcon, ChartBarIcon } from '@heroicons/react/20/solid';
 
 import type Subheader from './types';
+import { useSelector } from 'react-redux';
+import { selectSubheader } from '../../lib/subheader/slice';
 
-export default function Subheader({ text }: Subheader.Props) {
+export default function Subheader() {
+  const text = useSelector(selectSubheader);
+
   return (
     <nav className='sticky top-0 w-full h-16 flex justify-center items-center pl-3 pr-1 bg-slate-400 dark:bg-slate-900 z-10'>
       <div className='max-w-4xl w-full flex justify-between items-center'>
