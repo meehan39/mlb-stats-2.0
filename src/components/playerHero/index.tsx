@@ -31,12 +31,16 @@ export default function PlayerHero({player, className, children}: PlayerHero.Pro
         className={`h-56 w-32 rounded-lg object-cover raised ${isLoading && 'animate-pulse'}`}
       />
       <div className='flex flex-col gap-1 w-full'>
-        <Loading isLoading={isLoading} text='xl' width='w-44 md:w-52'>
-          <span className={`text-xl font-medium`}>
-            {/* {[data[i].name, primaryNumber && `#${primaryNumber}`] */}
-            {player?.name}
-          </span>
-        </Loading>
+        <div className='flex justify-between text-xl'>
+          <Loading isLoading={isLoading} text='xl' width='w-36'>
+            <span>{player?.name}</span>
+          </Loading>
+          <Loading isLoading={isLoading} text='xl' width='w-10' align='right'>
+            <span className={`secondary-text`}>
+              {player?.jerseyNumber && `#${player?.jerseyNumber}`}
+            </span>
+          </Loading>
+        </div>
         <Loading isLoading={isLoading} text='sm' width='w-32'>
           <span className='text-sm font-medium secondary-text'>
             {player?.teamName}

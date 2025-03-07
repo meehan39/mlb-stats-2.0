@@ -6,4 +6,5 @@ export interface PlayerStats {
   homeRuns: number;
   gamesPlayed: number;
   atBats: number;
+  jerseyNumber: number;
 }

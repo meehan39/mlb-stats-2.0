@@ -12,4 +12,5 @@ export const formatPlayerData = (
   homeRuns: playerData?.stats?.[0]?.splits?.[0]?.stat?.homeRuns ?? 0,
   gamesPlayed: playerData?.stats?.[0]?.splits?.[0]?.stat?.gamesPlayed ?? 0,
   atBats: playerData?.stats?.[0]?.splits?.[0]?.stat?.atBats ?? 0,
+  jerseyNumber: parseInt(playerData?.primaryNumber ?? '0'),
 });

@@ -1,3 +1,5 @@
+import TeamApi from '../../app/api/team/[teamKey]/types';
+
 namespace PlayerHero {
   export interface Props {
     player?: TeamApi.PlayerData;
