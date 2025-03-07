@@ -3,24 +3,47 @@
 @tailwind utilities;
 
 :root {
-    --foreground: rgb(0, 0, 0);
-    --background: rgb(255, 255, 255);
+  --foreground: rgb(0, 0, 0);
+  --background: rgb(255, 255, 255);
 }
 
 @media (prefers-color-scheme: dark) {
-    :root {
-        --foreground: rgb(255, 255, 255);
-        --background: rgb(22 32 47);
-    }
+  :root {
+    --foreground: rgb(255, 255, 255);
+    --background: rgb(22 32 47);
+  }
 }
 
 body {
-    color: var(--foreground);
-    background: var(--background);
+  color: var(--foreground);
+  background: var(--background);
 }
 
 @layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .divider {
+    @apply self-stretch bg-gradient-to-tr from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400;
+  }
+  .divider-vertical {
+    @apply h-full w-px divider;
+  }
+  .divider-horizontal {
+    @apply h-px w-full divider;
+  }
+
+  .secondary-text {
+    @apply text-gray-700 dark:text-gray-400;
+  }
+  .card {
+    @apply rounded-lg p-2 bg-slate-200 dark:bg-slate-800 shadow-black/50 shadow flex gap-4;
+  }
+  .clickable-card {
+    @apply card;
+    @apply cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-700;
+  }
 }

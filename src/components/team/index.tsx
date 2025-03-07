@@ -1,98 +1,149 @@
 'use client';
-import axios from '../../utils/axios';
 import Subheader from '../subheader';
-import Table from '../table';
 import Loading from '../loading';
 
-import { LEAGUE_DATA } from '../../constants';
+import { LEAGUE_DATA, PATHS } from '../../constants';
 import { useAppSelector } from '../../lib/hooks';
 import { selectTimeSpan } from '../../lib/timeSpan/slice';
-import { useEffect, useState } from 'react';
-import { getTodaysGamePromises } from '../../utils';
+import { useEffect } from 'react';
 
 import type Team from './types';
 import type TeamApi from '../../app/api/team/[teamKey]/types';
-import type TodaysGame from '../../app/api/todaysGame/[teamId]/types';
-import type { PlayerStats } from '../../app/api/utils/types';
 import type { TeamKey } from '../../constants/types';
+import { useGetTeamStatsQuery } from '../../lib/team/query';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import Stat from '../stat';
 
 export default function Team({ teamKey }: Team.Props) {
-  function PlayerCard({ name, todaysGame }: Team.PlayerCard.Props) {
-    return (
-      <div className='flex flex-col items-start gap-1'>
-        <span className='text-xl'>{name}</span>
-        <Loading isLoading={todaysGames.length === 0} text='sm' width='w-full'>
-          {(timeSpan === 'season' || timeSpan === nextMonth) &&
-            getState(todaysGame)}
-        </Loading>
-      </div>
-    );
-  }
-
+  const router = useRouter();
   const timeSpan = useAppSelector(selectTimeSpan);
-  const nextMonth = (new Date().getMonth() + 1).toString();
-  const [rows, setRows]: [Team.Row[], any] = useState([]);
-  const [playerStats, setPlayerStats] = useState<PlayerStats[]>([]);
-  const [todaysGames, setTodaysGames] = useState<TodaysGame.Data[]>([]);
+  const { data, isLoading } = useGetTeamStatsQuery({
+    teamId: teamKey,
+    timeSpan,
+  });
 
   useEffect(() => {
-    const fetchTeam = async () => {
-      // Fetch team data
-      const { data }: TeamApi.Response = await axios.get(
-        `/api/team/${teamKey}?timeSpan=${timeSpan}`,
-      );
-      const sortedData = data.sort((a, b) =>
-        a.homeRuns < b.homeRuns ? 1 : -1,
-      );
-      setPlayerStats(sortedData);
-
-      // If timespan is 'season' or current month, fetch today's games
-      if (
-        timeSpan === 'season' ||
-        timeSpan === nextMonth ||
-        todaysGames.length > 0
-      ) {
-        const todaysGameResponse = await Promise.all(
-          getTodaysGamePromises(
-            sortedData.map(player => ({
-              teamId: player.teamId,
-              playerId: player.playerId,
-            })),
-          ),
-        );
-        setTodaysGames(todaysGameResponse);
-      }
-    };
-    fetchTeam();
-  }, [timeSpan, teamKey]);
-
-  useEffect(() => {
-    setRows(
-      playerStats.map(({ playerId, name, homeRuns }, index) => ({
-        link: `/player/${playerId}`,
-        cells: [
-          <PlayerCard
-            key={name}
-            name={name}
-            todaysGame={todaysGames?.[index]}
-          />,
-          <span key={playerId} className='text-xl'>
-            {homeRuns}
-          </span>,
-        ],
-      })),
-    );
-  }, [playerStats, todaysGames]);
+    console.log('data', data);
+  }, [data]);
 
   return (
     <>
       <Subheader text={LEAGUE_DATA[teamKey as TeamKey].teamName} />
-      <Table
-        headers={[{ text: 'Player' }, { text: 'Home Runs', align: 'right' }]}
-        rows={rows}
-        loadingRows={6}
-      />
+      <div
+        className={`
+        grid grid-cols-1 w-full md:grid-cols-2 max-w-4xl
+        gap-4 p-4
+        
+      `}>
+        {(data ?? Array.from({ length: 6 })).map((_, i) => (
+          <div
+            key={i}
+            onClick={() => {
+              if (!isLoading && data?.[i]) {
+                router.push(`/player/${data[i].playerId}`);
+              }
+            }}
+            className={`clickable-card`}>
+            <Image
+              src={
+                !isLoading && data?.[i]
+                  ? PATHS.PLAYER_HERO_IMAGE(data[i].playerId)
+                  : '/generic-avatar.PNG'
+              }
+              alt={data?.[i]?.name ?? 'Generic player avatar'}
+              width={100}
+              height={150}
+              className='h-56 w-32 rounded-lg object-cover shadow shadow-black/50'
+            />
+            <div className='flex flex-col gap-1 w-full'>
+              <Loading isLoading={isLoading} text='xl' width='w-44 md:w-52'>
+                <span className={`text-xl font-medium`}>
+                  {/* {[data[i].name, primaryNumber && `#${primaryNumber}`] */}
+                  {data?.[i].name}
+                </span>
+              </Loading>
+              <Loading isLoading={isLoading} text='sm' width='w-32'>
+                <span className='text-sm font-medium secondary-text'>
+                  {data?.[i].teamName}
+                </span>
+              </Loading>
+              <div className='flex gap-2 w-full justify-around p-2'>
+                <Stat
+                  isLoading={isLoading}
+                  label='HR'
+                  value={data?.[i].homeRuns}
+                />
+                <div className='divider-vertical'></div>
+                <Stat
+                  isLoading={isLoading}
+                  label='GP'
+                  value={data?.[i].gamesPlayed}
+                />
+                <div className='divider-vertical'></div>
+                <Stat
+                  isLoading={isLoading}
+                  label='AB'
+                  value={data?.[i].atBats}
+                />
+              </div>
+              <div className='divider-horizontal'></div>
+              <div className='h-full flex gap-1 w-full justify-center items-center'>
+                {data?.[i].game ? (
+                  <div className='flex flex-col h-full w-full justify-between'>
+                    <div className='text-sm secondary-text whitespace-nowrap flex justify-between w-full'>
+                      <span>{getGameState(data?.[i].game)}</span>
+                      <span>
+                        {data?.[i].game.state !== 'scheduled' &&
+                          `${data?.[i].game.homeRuns} HR${data?.[i].game.homeRuns !== 1 ? 's' : ''}`}
+                      </span>
+                    </div>
+                    <div className='text-sm flex flex-col justify-between h-full w-full py-1'>
+                      <ScoreBugItem
+                        team={data?.[i].game.home}
+                        state={data?.[i].game.state}
+                      />
+                      <ScoreBugItem
+                        team={data?.[i].game.away}
+                        state={data?.[i].game.state}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <span className='text-sm secondary-text'>No game today.</span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </>
+  );
+}
+
+export function ScoreBugItem({
+  team,
+  state,
+}: {
+  team: TeamApi.TeamData;
+  state?: TeamApi.GameState;
+}) {
+  return (
+    <div className='flex justify-between'>
+      <div className='flex gap-2'>
+        <Image
+          src={PATHS.TEAM_LOGO(team.id)}
+          alt={team.name ?? ''}
+          width={40}
+          height={40}
+          className='rounded-full h-8 w-8'
+        />
+        <span className='flex justify-center items-center'>{team.name}</span>
+      </div>
+      <span className='flex justify-center items-center'>
+        {state !== 'scheduled' && team.score}
+      </span>
+    </div>
   );
 }
 
@@ -105,38 +156,15 @@ const formatTime = (timeStr: string) => {
   return `${hours ? hours : 12}:${minutes < 10 ? '0' + minutes : minutes} ${ampm}`;
 };
 
-const getState = (todaysGame: TodaysGame.Game | null | undefined) => {
-  console.log(todaysGame);
+const getGameState = (todaysGame: TeamApi.Game | null | undefined) => {
   switch (todaysGame?.state) {
     case 'live':
-      return (
-        <span>
-          <span className='text-green-600 dark:text-green-400'>LIVE</span>
-          <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
-          <span>{todaysGame.opponent}</span>
-          <span>{todaysGame.score},</span>
-          <span>{todaysGame.homeRuns} HR</span>
-        </span>
-      );
+      return 'LIVE';
     case 'scheduled':
-      return (
-        <span>
-          <span>{formatTime(todaysGame.startTime)}</span>
-          <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
-          <span>{todaysGame.opponent}</span>
-        </span>
-      );
+      return formatTime(todaysGame.startTime);
     case 'final':
-      return (
-        <span className='flex gap-1'>
-          <span>Final</span>
-          <span>{todaysGame.score}</span>
-          <span>{todaysGame.location === 'away' ? `@` : `vs`}</span>
-          <span>{todaysGame.opponent},</span>
-          <span>{todaysGame.homeRuns} HR</span>
-        </span>
-      );
+      return 'Final';
     default:
-      return <span>No games today.</span>;
+      return;
   }
 };

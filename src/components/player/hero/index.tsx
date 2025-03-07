@@ -53,7 +53,13 @@ export default function Hero({
             </Loading>
             <Loading isLoading={loading} text='sm' width='w-20'>
               <span className='text-sm font-medium text-gray-700 dark:text-gray-400'>
-                {owner && LEAGUE_DATA[owner as TeamKey].teamName}
+                {owner ? (
+                  <a href={`/team/${owner}`} className='underline'>
+                    {LEAGUE_DATA[owner as TeamKey].teamName}
+                  </a>
+                ) : (
+                  'Free agent'
+                )}
               </span>
             </Loading>
           </div>

@@ -47,6 +47,7 @@ export default function Standings() {
             ],
           }),
         );
+        console.log(dataRows);
         setRows(
           sortRows(dataRows, 1, 2).map(({ link, cells }, index) => ({
             link,

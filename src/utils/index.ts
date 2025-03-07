@@ -1,16 +1,15 @@
-import axios from './axios';
-import TodaysGame from '../app/api/todaysGame/[teamId]/types';
-import type { TodayGameData } from './types';
+import type MlbApi from '../app/api/utils/MlbApi';
 
-export const getTodaysGamePromises = (
-  todaysGames: TodayGameData[],
-): Promise<TodaysGame.Data>[] =>
-  todaysGames.map(
-    game =>
-      new Promise<TodaysGame.Data>(async resolve => {
-        const { data }: TodaysGame.Response = await axios.get(
-          `/api/todaysGame/${game.teamId}${game.playerId && `?playerId=${game.playerId}`}`,
-        );
-        resolve(data);
-      }),
-  );
+export const formatPlayerData = (
+  playerId: number,
+  name: string,
+  playerData: MlbApi.PlayerStats.Player | null,
+) => ({
+  playerId,
+  name,
+  teamId: playerData?.currentTeam.id ?? -1,
+  teamName: playerData?.currentTeam.name ?? 'Free Agent',
+  homeRuns: playerData?.stats?.[0]?.splits?.[0]?.stat?.homeRuns ?? 0,
+  gamesPlayed: playerData?.stats?.[0]?.splits?.[0]?.stat?.gamesPlayed ?? 0,
+  atBats: playerData?.stats?.[0]?.splits?.[0]?.stat?.atBats ?? 0,
+});
