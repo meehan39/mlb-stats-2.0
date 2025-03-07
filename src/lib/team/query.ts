@@ -9,12 +9,13 @@ export interface GetTeamStatsRequest {
 
 export const teamApi = createApi({
   reducerPath: 'teamApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
-  endpoints: (builder) => ({
-    getTeamStats: builder.query<Team.Response["data"], GetTeamStatsRequest>({
-      query: ({teamId, timeSpan}) => `team/${teamId}?timeSpan=${timeSpan ?? 'season'}`,
+  baseQuery: fetchBaseQuery({ baseUrl: '/api/team/' }),
+  endpoints: builder => ({
+    getTeamStats: builder.query<Team.Response['data'], GetTeamStatsRequest>({
+      query: ({ teamId, timeSpan }) =>
+        `${teamId}?timeSpan=${timeSpan ?? 'season'}`,
     }),
   }),
-})
+});
 
 export const { useGetTeamStatsQuery } = teamApi;

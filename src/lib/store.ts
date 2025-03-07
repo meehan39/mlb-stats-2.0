@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import timeSpanReducer from './timeSpan/slice';
 import subheaderReducer from './subheader/slice';
 import { teamApi } from './team/query';
+import { playerApi } from './player/query';
 
 export const makeStore = () => {
   return configureStore({
@@ -9,9 +10,10 @@ export const makeStore = () => {
       timeSpan: timeSpanReducer,
       subheader: subheaderReducer,
       [teamApi.reducerPath]: teamApi.reducer,
+      [playerApi.reducerPath]: playerApi.reducer,
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(teamApi.middleware),
+      getDefaultMiddleware().concat(teamApi.middleware, playerApi.middleware),
   });
 };
 
