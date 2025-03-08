@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import timeSpanReducer from './timeSpan/slice';
 import subheaderReducer from './subheader/slice';
-import { teamApi } from './team/query';
-import { playerApi } from './player/query';
+import { teamApi } from './api/team/query';
+import { leagueLeadersApi } from './api/leagueLeaders/query';
+import { standingsApi } from './api/standings/query';
+import { playerApi } from './api/player/query';
 
 export const makeStore = () => {
   return configureStore({
@@ -11,9 +13,11 @@ export const makeStore = () => {
       subheader: subheaderReducer,
       [teamApi.reducerPath]: teamApi.reducer,
       [playerApi.reducerPath]: playerApi.reducer,
+      [leagueLeadersApi.reducerPath]: leagueLeadersApi.reducer,
+      [standingsApi.reducerPath]: standingsApi.reducer,
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(teamApi.middleware, playerApi.middleware),
+      getDefaultMiddleware().concat(teamApi.middleware, playerApi.middleware, leagueLeadersApi.middleware, standingsApi.middleware),
   });
 };
 
