@@ -1,35 +1,9 @@
-import type { ResponseType } from 'axios';
-import type { PlayerStats } from '../../utils/types';
+import type { PlayerMeta, PlayerGame, PlayerStats } from '../../utils/types';
 
-namespace Team {
-  interface Response extends ResponseType {
-    data: PlayerData[];
-  }
+export type GetTeamResponse = GetTeamResponseData[];
 
-  type Location = 'home' | 'away';
-  type GameState = 'live' | 'scheduled' | 'final';
-
-  interface PlayerData extends PlayerStats {
-    game: Game;
-  }
-
-  interface Game {
-    state: GameState;
-    startTime: string;
-    home: TeamData;
-    away: TeamData;
-    homeRuns: number;
-  }
-
-  interface TeamData {
-    id: number;
-    name: string;
-    score: number;
-    record: {
-      wins: number;
-      losses: number;
-    };
-  }
+export interface GetTeamResponseData {
+  meta: PlayerMeta;
+  game: PlayerGame | null;
+  stats: Pick<PlayerStats, 'homeRuns' | 'gamesPlayed' | 'atBats'>;
 }
-
-export default Team;

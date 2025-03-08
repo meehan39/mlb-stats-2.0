@@ -1,26 +1,10 @@
 import type { TeamKey } from '../../../constants/types';
-import type { LeagueData } from '../../../constants/types';
-import type { ResponseType } from 'axios';
-import type { PlayerStats } from '../utils/types';
 
-namespace Standings {
-    type Data = {
-        [key in TeamKey]: TotalHomeRuns;
-    };
-
-    interface TotalHomeRuns {
-        topFour: number;
-        total: number;
-    }
-
-    interface Response extends ResponseType {
-        data: Data;
-    }
+export interface GetStandingsResponse {
+  [key in TeamKey]: TeamHomeRuns;
 }
 
 export interface TeamHomeRuns {
-    key: TeamKey;
-    homeRuns: PlayerStats[];
+  topFour: number;
+  total: number;
 }
-
-export default Standings;

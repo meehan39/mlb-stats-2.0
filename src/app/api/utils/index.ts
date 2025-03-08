@@ -1,11 +1,9 @@
 import axios from 'axios';
 import queryString from 'querystring';
 import { LEAGUE_DATA, PATHS } from '../../../constants';
-import type { Player, TeamKey, TimeSpan } from '../../../constants/types';
-import type { PlayerStats } from './types';
+import type { TeamKey, TimeSpan } from '../../../constants/types';
+import type { PlayerGame, PlayerMeta } from './types';
 import type MlbApi from './MlbApi';
-import type Team from '../team/[teamKey]/types';
-import { formatPlayerData } from '../../../utils';
 
 export const getPlayerData = async (
   playerId: number,
@@ -34,18 +32,6 @@ export const getLeagueLeaders = async (
   }
 };
 
-export const getRosterPromises = (
-  roster: Player[],
-  timeSpan: TimeSpan,
-): Promise<PlayerStats>[] =>
-  roster.map(
-    player =>
-      new Promise<PlayerStats>(async resolve => {
-        const data = await getPlayerData(player.id, timeSpan);
-        resolve(formatPlayerData(player.id, player.name, data));
-      }),
-  );
-
 export const getOwner = (playerId: number): TeamKey | null => {
   for (const teamKey in LEAGUE_DATA) {
     for (const player of LEAGUE_DATA[teamKey as TeamKey].roster) {
@@ -59,27 +45,25 @@ export const getOwner = (playerId: number): TeamKey | null => {
 
 export const getTodaysGame = async (
   playerId: number,
-  teamId: number,
-): Promise<Team.Game | null> => {
+  teamId: number | undefined,
+): Promise<PlayerGame | null> => {
+  if (!teamId) {
+    return null;
+  }
   const { data }: MlbApi.Schedule.Response = await axios.get(
     `${PATHS.SCHEDULE(teamId)}`,
   );
   const todaysGame = data?.dates?.[0]?.games?.[0];
 
-  const [queried, opposing]: [
-    MlbApi.Schedule.TeamType,
-    MlbApi.Schedule.TeamType,
-  ] =
-    teamId === todaysGame?.teams?.home?.team?.id
-      ? ['home', 'away']
-      : ['away', 'home'];
+  const location: MlbApi.Schedule.TeamType =
+    teamId === todaysGame?.teams?.home?.team?.id ? 'home' : 'away';
+  const state =
+    { F: 'final', I: 'live' }[todaysGame.status.codedGameState] ?? 'scheduled';
 
   return todaysGame
     ? ({
-        state:
-          { F: 'final', I: 'live' }[todaysGame.status.codedGameState] ??
-          'scheduled',
-        location: queried,
+        state,
+        location,
         startTime: todaysGame.gameDate,
         home: {
           id: todaysGame.teams.home.team.id,
@@ -97,7 +81,7 @@ export const getTodaysGame = async (
           todaysGame && playerId
             ? await fetchGameStats(playerId, todaysGame.gamePk)
             : 0,
-      } as Team.Game)
+      } as PlayerGame)
     : null;
 };
 
@@ -112,4 +96,16 @@ const fetchGameStats = async (playerId: number, gameId: number) => {
   }
 };
 
-export const parseQueryString = (url: string) => queryString.parse(url.split('?')?.[1]) ?? {};;
+export const formatPlayerMeta = (
+  playerData: MlbApi.PlayerStats.Player | null | undefined,
+): PlayerMeta => ({
+  playerId: playerData?.id ?? -1,
+  owner: getOwner(playerData?.currentTeam.id ?? -1),
+  fullName: playerData?.fullName ?? 'Unknown',
+  teamId: playerData?.currentTeam.id ?? -1,
+  teamName: playerData?.currentTeam.name ?? 'Free Agent',
+  jerseyNumber: parseInt(playerData?.primaryNumber ?? '0'),
+});
+
+export const parseQueryString = (url: string) =>
+  queryString.parse(url.split('?')?.[1]) ?? {};
