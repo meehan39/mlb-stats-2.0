@@ -25,7 +25,7 @@ export default function RootLayout({
         <main className='flex flex-col items-center justify-start min-h-[calc(100dvh)] w-full flex-1'>
           <StoreProvider>
             <Subheader />
-            {children}
+            <div className='w-full max-w-4xl p-4'>{children}</div>
           </StoreProvider>
         </main>
       </body>

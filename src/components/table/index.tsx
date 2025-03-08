@@ -1,5 +1,5 @@
 'use client';
-import Loading from '../loading';
+import Loading from '../loadable';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
@@ -17,7 +17,7 @@ export default function Table({
   }, [rowProps]);
 
   return (
-    <table className='table-auto w-full text-sm max-w-4xl md:my-6 md:rounded-xl overflow-clip raised ring-2 ring-slate-300 dark:ring-slate-600'>
+    <table className='table-auto w-full text-sm md:my-6 md:rounded-xl overflow-clip raised ring-2 ring-slate-300 dark:ring-slate-600'>
       {!hideHeader && <THead headers={headers} />}
       <TBody
         rows={rows}

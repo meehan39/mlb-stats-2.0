@@ -1,15 +1,15 @@
 'use client';
 import Icon from './icon';
 import Dropdown from '../dropdown';
-import Loading from '../loading';
+import Loading from '../loadable';
 import { HomeIcon, ChartBarIcon } from '@heroicons/react/20/solid';
+import { selectSubheader } from '../../store/subheader/slice';
+import { useAppSelector } from '../../store/hooks';
 
 import type Subheader from './types';
-import { useSelector } from 'react-redux';
-import { selectSubheader } from '../../lib/subheader/slice';
 
 export default function Subheader() {
-  const text = useSelector(selectSubheader);
+  const text = useAppSelector(selectSubheader);
 
   return (
     <nav className='sticky top-0 w-full h-16 flex justify-center items-center pl-3 pr-1 bg-slate-400 dark:bg-slate-900 z-10'>

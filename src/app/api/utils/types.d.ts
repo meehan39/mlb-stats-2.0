@@ -9,7 +9,6 @@ export interface PlayerMeta {
   teamId: number;
   teamName: string;
   jerseyNumber: number;
-  game?: PlayerGame | null;
 }
 
 export type PlayerStats = Partial<MlbApi.PlayerStats.StatsSplit['stat']>;
