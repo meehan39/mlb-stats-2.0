@@ -2,7 +2,7 @@ import type MlbApi from './MlbApi';
 
 type GameState = 'live' | 'scheduled' | 'final';
 
-export interface PlayerMeta {
+export interface PlayerInfo {
   playerId: number;
   owner: string | null;
   fullName: string;
@@ -15,11 +15,17 @@ export type PlayerStats = Partial<MlbApi.PlayerStats.StatsSplit['stat']>;
 
 export interface PlayerGame {
   state: GameState;
+  location: string;
   startTime: string;
   home: TeamData;
   away: TeamData;
-  homeRuns: number;
+  stats: PlayerGameStats;
 }
+
+export type PlayerGameStats = Pick<
+  MlbApi.GameStats.Stat,
+  'homeRuns' | 'baseOnBalls' | 'hits' | 'atBats' | 'strikeOuts' | 'rbi' | 'runs'
+>;
 
 export interface TeamData {
   id: number;

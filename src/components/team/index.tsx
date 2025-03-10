@@ -1,6 +1,6 @@
 'use client';
-import Stat from '../stat';
 import PlayerHero from '../playerHero';
+import StatGrid from '../statGrid';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
 import { useGetTeamStatsQuery } from '../../store/api/team/query';
@@ -34,26 +34,18 @@ export default function Team({ teamKey }: Team.Props) {
       {(data ?? Array.from({ length: 6 })).map((_, i) => (
         <PlayerHero
           key={i}
-          player={data?.[i]?.meta}
+          player={data?.[i]?.info}
           todaysGame={data?.[i]?.game}
           className='flex justify-around'
-          onClick={() => router.push(`/player/${data?.[i]?.meta.playerId}`)}>
-          <Stat
+          onClick={() => router.push(`/player/${data?.[i]?.info.playerId}`)}>
+          <StatGrid
             isLoading={isLoading}
-            label='HR'
-            value={data?.[i]?.stats?.homeRuns?.toString() ?? '0'}
-          />
-          <div className='divider-vertical'></div>
-          <Stat
-            isLoading={isLoading}
-            label='GP'
-            value={data?.[i]?.stats?.gamesPlayed?.toString() ?? '0'}
-          />
-          <div className='divider-vertical'></div>
-          <Stat
-            isLoading={isLoading}
-            label='AB'
-            value={data?.[i]?.stats?.atBats?.toString() ?? '0'}
+            columns={3}
+            stats={[
+              { label: 'HR', value: data?.[i]?.stats?.homeRuns ?? 0 },
+              { label: 'GP', value: data?.[i]?.stats?.gamesPlayed ?? 0 },
+              { label: 'AB', value: data?.[i]?.stats?.atBats ?? 0 },
+            ]}
           />
         </PlayerHero>
       ))}

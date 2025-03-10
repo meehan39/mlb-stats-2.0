@@ -1,19 +1,19 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import { useAppSelector, useAppDispatch } from '../../lib/hooks';
-import { selectTimeSpan } from '../../lib/timeSpan/slice';
-import { setTimeSpan } from '../../lib/timeSpan/slice';
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { selectTimeSpan } from '../../store/timeSpan/slice';
+import { setTimeSpan } from '../../store/timeSpan/slice';
 import { timeSpanValues } from '../../constants';
 import { TimeSpan } from '../../constants/types';
 
 export default function TimeSpanDropdown() {
-    const timeSpanKeys = Array.from(
-        { length: new Date().getMonth() - 1 },
-        (_, index) => (3 + index).toString() as TimeSpan,
-    )
-        .concat(['season'])
-        .reverse();
+  const timeSpanKeys = Array.from(
+    { length: new Date().getMonth() - 1 },
+    (_, index) => (3 + index).toString() as TimeSpan,
+  )
+    .concat(['season'])
+    .reverse();
     const timeSpan = useAppSelector(selectTimeSpan);
     const dispatch = useAppDispatch();
     return (

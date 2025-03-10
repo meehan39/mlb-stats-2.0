@@ -1,9 +1,9 @@
-import type { PlayerMeta, PlayerGame, PlayerStats } from '../../utils/types';
+import type { PlayerInfo, PlayerGame, PlayerStats } from '../../utils/types';
 
 export type GetTeamResponse = GetTeamResponseData[];
 
 export interface GetTeamResponseData {
-  meta: PlayerMeta;
+  info: PlayerInfo;
   game: PlayerGame | null;
   stats: Pick<PlayerStats, 'homeRuns' | 'gamesPlayed' | 'atBats'>;
 }

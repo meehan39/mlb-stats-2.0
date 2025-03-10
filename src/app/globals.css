@@ -23,17 +23,21 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  a {
+    @apply underline decoration-sky-300 dark:decoration-sky-600;
+  }
 }
 
 @layer components {
   .divider {
-    @apply self-stretch bg-gradient-to-tr from-transparent via-neutral-500 to-transparent opacity-25 dark:via-neutral-400;
+    @apply bg-neutral-500 opacity-25 dark:bg-neutral-400;
   }
   .divider-vertical {
-    @apply h-full w-px divider;
+    @apply h-auto w-px divider;
   }
   .divider-horizontal {
-    @apply h-px w-full divider;
+    @apply h-px w-auto divider;
   }
 
   .secondary-text {

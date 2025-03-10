@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'querystring';
 import { LEAGUE_DATA, PATHS } from '../../../constants';
 import type { TeamKey, TimeSpan } from '../../../constants/types';
-import type { PlayerGame, PlayerMeta } from './types';
+import type { PlayerGame, PlayerInfo } from './types';
 import type MlbApi from './MlbApi';
 
 export const getPlayerData = async (
@@ -54,16 +54,13 @@ export const getTodaysGame = async (
     `${PATHS.SCHEDULE(teamId)}`,
   );
   const todaysGame = data?.dates?.[0]?.games?.[0];
-
-  const location: MlbApi.Schedule.TeamType =
-    teamId === todaysGame?.teams?.home?.team?.id ? 'home' : 'away';
   const state =
     { F: 'final', I: 'live' }[todaysGame.status.codedGameState] ?? 'scheduled';
 
   return todaysGame
     ? ({
         state,
-        location,
+        location: todaysGame.teams.home.team.locationName,
         startTime: todaysGame.gameDate,
         home: {
           id: todaysGame.teams.home.team.id,
@@ -77,10 +74,10 @@ export const getTodaysGame = async (
           score: todaysGame.teams.away.score,
           record: todaysGame.teams.away.leagueRecord,
         },
-        homeRuns:
+        stats:
           todaysGame && playerId
             ? await fetchGameStats(playerId, todaysGame.gamePk)
-            : 0,
+            : {},
       } as PlayerGame)
     : null;
 };
@@ -90,15 +87,17 @@ const fetchGameStats = async (playerId: number, gameId: number) => {
     const { data }: MlbApi.GameStats.Response = await axios.get(
       `${PATHS.GAME_STATS(playerId, gameId)}`,
     );
-    return data.stats[0]?.splits?.[0].stat?.homeRuns ?? 0;
+    const { homeRuns, hits, baseOnBalls, atBats, strikeOuts, rbi, runs } =
+      data.stats[0]?.splits?.[0]?.stat ?? {};
+    return { homeRuns, hits, baseOnBalls, atBats, strikeOuts, rbi, runs };
   } catch {
-    return 0;
+    return {};
   }
 };
 
-export const formatPlayerMeta = (
+export const formatPlayerInfo = (
   playerData: MlbApi.PlayerStats.Player | null | undefined,
-): PlayerMeta => ({
+): PlayerInfo => ({
   playerId: playerData?.id ?? -1,
   owner: getOwner(playerData?.currentTeam.id ?? -1),
   fullName: playerData?.fullName ?? 'Unknown',

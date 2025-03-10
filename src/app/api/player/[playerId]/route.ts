@@ -1,5 +1,10 @@
-import { getPlayerData, parseQueryString, getTodaysGame } from '../../utils';
-import { formatPlayerMeta } from '../../utils';
+import {
+  getPlayerData,
+  parseQueryString,
+  getTodaysGame,
+  getOwner,
+} from '../../utils';
+import { formatPlayerInfo } from '../../utils';
 import type { TimeSpan } from '../../../../constants/types';
 import type { GetPlayerResponse } from './types';
 
@@ -14,10 +19,26 @@ export async function GET(
     const playerId = parseInt(params.playerId);
     const player = await getPlayerData(playerId, timeSpan);
     const game = await getTodaysGame(playerId, player?.currentTeam?.id);
+    const {
+      batSide,
+      currentAge,
+      height,
+      weight,
+      mlbDebutDate,
+      primaryPosition,
+    } = player ?? {};
     const responseData: GetPlayerResponse = {
-      meta: { ...formatPlayerMeta(player), game },
+      info: { ...formatPlayerInfo(player), owner: getOwner(playerId) },
       stats: player?.stats?.[0]?.splits?.[0]?.stat ?? {},
       todaysGame: game,
+      metaData: {
+        bats: batSide?.code,
+        currentAge,
+        height,
+        weight,
+        mlbDebutDate,
+        primaryPosition: primaryPosition?.abbreviation,
+      },
     };
     return Response.json(responseData);
   } catch (e) {
