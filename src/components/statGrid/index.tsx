@@ -15,15 +15,14 @@ export default function StatGrid({
 }) {
   const rows = [];
   for (let i = 0; i < stats.length; i += columns) {
-    const chunk = Array.from({ length: columns }, (_, index) => stats[i + index]).map((stat) => {
-      return stat ?? {
-        label: '',
-        value: '',
-      }
+    const chunk = Array.from(
+      { length: columns },
+      (_, index) => stats[i + index],
+    ).map(stat => {
+      return stat ?? { label: '', value: '' };
     });
     rows.push(chunk);
   }
-  console.log('rows', rows);
   return (
     <div className={`w-full h-full flex flex-col ${className}`}>
       {rows.map((row, index) => (

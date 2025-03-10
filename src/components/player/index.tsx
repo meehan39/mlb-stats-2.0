@@ -39,7 +39,6 @@ export default function Player({ playerId }: PlayerProps) {
       setPlayerMetaData(metaData);
       dispatch(setSubheader(info.fullName));
     }
-    console.log('data', data);
   }, [data]);
 
   return (

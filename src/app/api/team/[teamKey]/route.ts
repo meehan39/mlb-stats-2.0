@@ -23,7 +23,6 @@ export async function GET(
       const { homeRuns, gamesPlayed, atBats } =
         data?.stats[0]?.splits[0]?.stat ?? {};
       const todaysGame = await getTodaysGame(player.id, info.teamId);
-      console.log('todaysGame', todaysGame);
       return {
         info,
         stats: { homeRuns, gamesPlayed, atBats },
