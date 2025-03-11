@@ -60,7 +60,8 @@ function PlayerImage({
   xl?: boolean;
 }) {
   return (
-    <div className={`col-span-2 ${!xl && 'row-span-2'}  w-full pr-2`}>
+    <div
+      className={`col-span-2 ${!xl && 'row-span-2'} w-full h-full pr-2 flex items-center justify-center`}>
       <Image
         src={
           !isLoading && player
@@ -70,7 +71,7 @@ function PlayerImage({
         alt={player?.fullName ?? 'Generic player avatar'}
         width={128}
         height={221}
-        className={`w-full rounded-lg object-cover raised ${isLoading && 'animate-pulse'} ${xl ? 'h-52 md:h-60' : 'h-52 md:h-56'}`}
+        className={`w-full rounded-lg object-cover raised ${isLoading && 'animate-pulse'} ${xl ? 'h-52 md:h-60' : ' h-48 sm:h-52 md:h-56'}`}
       />
     </div>
   );
