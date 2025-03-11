@@ -3,14 +3,14 @@ import Loading from '../loadable';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import type Table from './types';
+import type TableTypes from './types';
 
 export default function Table({
   headers,
   rows: rowProps,
   hideHeader,
   loadingRows,
-}: Table.Props) {
+}: TableTypes.Props) {
   const [rows, setRows] = useState(rowProps);
   useEffect(() => {
     setRows(rowProps);
@@ -28,7 +28,11 @@ export default function Table({
   );
 }
 
-function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
+function TBody({
+  rows: rowProps,
+  alignments,
+  loadingRows,
+}: TableTypes.TBody.Props) {
   const router = useRouter();
   const [rows, setRows] = useState(rowProps);
   useEffect(() => {
@@ -38,7 +42,7 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
     <tbody className='divide-y divide-slate-100 dark:divide-slate-950 font-medium'>
       {(rows.length ? rows : Array.from({ length: loadingRows })).map(
         (item, index) => {
-          const { cells, link } = (item as Table.Row) ?? {};
+          const { cells, link } = (item as TableTypes.Row) ?? {};
           return (
             <tr
               key={index}
@@ -50,7 +54,7 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
                 <td
                   key={index}
                   className={`px-3 py-4 md:px-5 ${align === 'right' ? 'text-right' : 'text-left'}`}>
-                  {
+                  {/* {
                     <Loading
                       isLoading={!cells}
                       text='sm'
@@ -58,7 +62,7 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
                       align={align}>
                       {cells?.[index]}
                     </Loading>
-                  }
+                  } */}
                 </td>
               ))}
             </tr>
@@ -69,7 +73,7 @@ function TBody({ rows: rowProps, alignments, loadingRows }: Table.TBody.Props) {
   );
 }
 
-function THead({ headers }: Table.THead.Props) {
+function THead({ headers }: TableTypes.THead.Props) {
   return (
     <thead className='sticky top-16 table-header-group bg-slate-400 dark:bg-slate-900 raised z-0'>
       <tr>

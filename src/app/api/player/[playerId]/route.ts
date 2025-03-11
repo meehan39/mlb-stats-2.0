@@ -9,10 +9,8 @@ import type { TimeSpan } from '../../../../constants/types';
 import type { GetPlayerResponse } from './types';
 
 export const dynamic = 'force-dynamic';
-export async function GET(
-  request: Request,
-  { params }: { params: { playerId: string } },
-) {
+export async function GET(request: Request, props: { params: Promise<{ playerId: string }> }) {
+  const params = await props.params;
   try {
     const timeSpan =
       (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';

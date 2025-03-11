@@ -55,7 +55,8 @@ export const getTodaysGame = async (
   );
   const todaysGame = data?.dates?.[0]?.games?.[0];
   const state =
-    { F: 'final', I: 'live' }[todaysGame.status.codedGameState] ?? 'scheduled';
+    { F: 'final', I: 'live' }[todaysGame?.status?.codedGameState] ??
+    'scheduled';
 
   return todaysGame
     ? ({

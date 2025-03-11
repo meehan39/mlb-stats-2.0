@@ -8,10 +8,10 @@ import { useEffect } from 'react';
 import { setSubheader } from '../../store/subheader/slice';
 import { LEAGUE_DATA } from '../../constants';
 import { useRouter } from 'next/navigation';
-import type Team from './types';
 import type { TeamKey } from '../../constants/types';
+import type { TeamProps } from './types';
 
-export default function Team({ teamKey }: Team.Props) {
+export default function Team({ teamKey }: TeamProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const timeSpan = useAppSelector(selectTimeSpan);

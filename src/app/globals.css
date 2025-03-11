@@ -30,21 +30,21 @@ body {
 }
 
 @layer components {
-  .divider {
-    @apply bg-neutral-500 opacity-25 dark:bg-neutral-400;
+  .divided {
+    @apply divide-neutral-500/25 dark:divide-neutral-400/25;
   }
-  .divider-vertical {
-    @apply h-auto w-px divider;
+  .divided-x {
+    @apply divided divide-x;
   }
-  .divider-horizontal {
-    @apply h-px w-auto divider;
+  .divided-y {
+    @apply divided divide-y;
   }
 
   .secondary-text {
     @apply text-gray-700 dark:text-gray-400;
   }
   .card {
-    @apply rounded-lg p-2 bg-slate-200 dark:bg-slate-800 raised flex gap-4;
+    @apply rounded-lg p-2 bg-slate-200 dark:bg-slate-800 raised;
   }
   .clickable-card {
     @apply card;

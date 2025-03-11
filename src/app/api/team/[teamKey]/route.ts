@@ -5,10 +5,8 @@ import type { TeamKey, TimeSpan } from '../../../../constants/types';
 import type { GetTeamResponse } from './types';
 
 export const dynamic = 'force-dynamic';
-export async function GET(
-  request: Request,
-  { params }: { params: { teamKey: TeamKey } },
-) {
+export async function GET(request: Request, props: { params: Promise<{ teamKey: TeamKey }> }) {
+  const params = await props.params;
   const timeSpan =
     (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
   const roster = LEAGUE_DATA?.[params.teamKey].roster;

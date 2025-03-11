@@ -70,7 +70,7 @@ function PlayerImage({
         alt={player?.fullName ?? 'Generic player avatar'}
         width={128}
         height={221}
-        className={`w-full rounded-lg object-cover raised ${isLoading && 'animate-pulse'} ${xl ? 'h-52 md:h-60' : 'h-52'}`}
+        className={`w-full rounded-lg object-cover raised ${isLoading && 'animate-pulse'} ${xl ? 'h-52 md:h-60' : 'h-52 md:h-56'}`}
       />
     </div>
   );
@@ -147,7 +147,7 @@ export function TodaysGame({
       width='w-10'
       height='h-10'
       className={`
-      ${xl ? 'col-span-7 md:col-span-5 pl-0 md:pl-2 pt-2 md:pt-0 border-t-2 mt-2 md:border-t-0 md:mt-0 md:border-l-2' : 'col-span-5 border-t-2 pt-2'}
+      ${xl ? 'col-span-7 md:col-span-5 pl-0 md:pl-2 pt-2 md:pt-0 border-t mt-2 md:border-t-0 md:mt-0 md:border-l' : 'col-span-5 border-t pt-2'}
       w-full h-full min-h-24 flex flex-col justify-center items-center 
       border-neutral-500/25 dark:border-neutral-400/25`}>
       {todaysGame ? (

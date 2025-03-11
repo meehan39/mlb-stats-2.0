@@ -6,8 +6,6 @@ import { HomeIcon, ChartBarIcon } from '@heroicons/react/20/solid';
 import { selectSubheader } from '../../store/subheader/slice';
 import { useAppSelector } from '../../store/hooks';
 
-import type Subheader from './types';
-
 export default function Subheader() {
   const text = useAppSelector(selectSubheader);
 

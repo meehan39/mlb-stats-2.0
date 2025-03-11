@@ -3,3 +3,8 @@ export interface StatProps {
   label: string;
   value: string | number;
 }
+
+export interface StatItem {
+  label: string;
+  value: string | number;
+}

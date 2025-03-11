@@ -79,20 +79,21 @@ export default function Player({ playerId }: PlayerProps) {
         </div>
         <StatGrid
           isLoading={isLoading}
-          columns={4}
+          columns={3}
           className='card'
           stats={[
             { label: 'GP', value: playerStats?.gamesPlayed ?? 0 },
             { label: 'AB', value: playerStats?.atBats ?? 0 },
             { label: 'PA', value: playerStats?.plateAppearances ?? 0 },
+            { label: 'AVG', value: playerStats?.avg ?? '.000' },
             { label: 'H', value: playerStats?.hits ?? 0 },
             { label: 'R', value: playerStats?.runs ?? 0 },
             { label: 'RBI', value: playerStats?.rbi ?? 0 },
             { label: '2B', value: playerStats?.doubles ?? 0 },
             { label: '3B', value: playerStats?.triples ?? 0 },
             { label: 'BB', value: playerStats?.baseOnBalls ?? 0 },
+            { label: 'IBB', value: playerStats?.intentionalWalks ?? 0 },
             { label: 'SO', value: playerStats?.strikeOuts ?? 0 },
-            { label: 'AVG', value: playerStats?.avg ?? '.000' },
             { label: 'OBP', value: playerStats?.obp ?? '.000' },
             { label: 'SLG', value: playerStats?.slg ?? '.000' },
             { label: 'OPS', value: playerStats?.ops ?? '.000' },

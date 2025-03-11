@@ -1,6 +1,6 @@
 import React from "react";
-import type { StatProps } from "./types";
-import Loadable from "../loadable";
+import type { StatItem, StatProps } from './types';
+import Loadable from '../loadable';
 
 export default function StatGrid({
   stats,
@@ -8,45 +8,30 @@ export default function StatGrid({
   columns,
   className,
 }: {
-  stats: { label: string; value: string | number }[];
+  stats: StatItem[];
   isLoading: boolean;
   columns: number;
   className?: string;
 }) {
-  const rows = [];
+  const rows: StatItem[][] = [];
   for (let i = 0; i < stats.length; i += columns) {
-    const chunk = Array.from(
-      { length: columns },
-      (_, index) => stats[i + index],
-    ).map(stat => {
-      return stat ?? { label: '', value: '' };
-    });
-    rows.push(chunk);
+    rows.push(stats.slice(i, i + columns));
   }
   return (
-    <div className={`w-full h-full flex flex-col ${className}`}>
+    <div className={`w-full h-full flex flex-col divided-y px-4 ${className}`}>
       {rows.map((row, index) => (
-        <React.Fragment key={index}>
-          <div key={index} className='h-full w-full py-1 flex flex-row'>
-            {(row.fill({
-              label: '',
-              value: '',
-            }, row.length, columns)).map((stat, index) => (
-              <React.Fragment key={index}>
-                <Stat
-                  isLoading={isLoading}
-                  label={stat.label}
-                  value={stat.value}
-                  key={index}
-                />
-                {index !== row.length - 1 && (
-                  <div className='divider-vertical' />
-                )}
-              </React.Fragment>
+        <div key={index} className='h-full w-full py-2 flex flex-row divided-x'>
+          {row
+            .fill({ label: '', value: '' }, row.length, columns)
+            .map((stat, index) => (
+              <Stat
+                isLoading={isLoading}
+                label={stat.label}
+                value={stat.value}
+                key={index}
+              />
             ))}
-          </div>
-          {index !== rows.length - 1 && <div className='divider-horizontal' />}
-        </React.Fragment>
+        </div>
       ))}
     </div>
   );
