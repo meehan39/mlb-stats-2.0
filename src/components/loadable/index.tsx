@@ -37,43 +37,41 @@ export default function Loadable({
   return (
     <div className={className}>
       {isLoading ? (
-      <div className={`w-full h-full${type}`}>
-        {component}
-      </div>
-    ) : (
-      children
-    )}
+        <div className={`h-full ${type}`}>{component}</div>
+      ) : (
+        children
+      )}
     </div>
   );
 }
 
-export function LoadableGeneric({height, width}: LoadableGenericProps) {
+export function LoadableGeneric({ height, width }: LoadableGenericProps) {
   return (
     <div
-    className={`
+      className={`
     animate-pulse
     rounded-full
     bg-slate-300 dark:bg-slate-700
     ${height}
     ${width}
   `}
-  />
-  )
+    />
+  );
 }
 
-
-function LoadableText({type, width}: LoadableTextProps) {
+function LoadableText({ type, width }: LoadableTextProps) {
   return (
     <div
-    className={`
+      className={`
     animate-pulse
     rounded-full
     bg-slate-300 dark:bg-slate-700
+    -z-10
     ${textConfig[type]}
     ${width}
   `}
-  />
-  )
+    />
+  );
 }
 
 function Spinner({height, width}: LoadableSpinnerProps) {

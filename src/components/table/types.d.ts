@@ -1,33 +1,29 @@
-namespace Table {
-    interface Props {
-        hideHeader?: boolean;
-        headers: Header[];
-        rows: Row[];
-        loadingRows: number;
-    }
-    namespace TBody {
-        interface Props {
-            rows: Row[];
-            loadingRows: number;
-            alignments: Alignment[];
-        }
-    }
-    namespace THead {
-        interface Props {
-            headers: Header[];
-        }
-    }
-    interface Header {
-        text: string;
-        align?: Alignment;
-        sort?: () => void;
-    }
-    interface Row {
-        cells: Cell[];
-        link?: string;
-    }
-    type Cell = number | string | JSX.Element;
-    type Alignment = 'left' | 'right' | 'center';
+export interface Header {
+  text?: string;
+  align?: Alignment;
+  className?: string;
+  loadingWidth?: string;
+}
+export interface Row {
+  cells: Cell[];
+  link?: string;
+}
+export type Cell = number | string | JSX.Element;
+export type Alignment = 'left' | 'right' | 'center';
+
+export interface TableProps {
+  headers: Header[];
+  rows: Row[];
+  loadingRows: number;
+  defaultSortIndex?: number;
 }
 
-export default Table;
+export interface TableHeaderProps {
+  headers: Header[];
+}
+
+export interface TableBodyProps {
+  rows: Row[];
+  loadingRows: number;
+  headers: Header[];
+}

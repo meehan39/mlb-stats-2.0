@@ -17,7 +17,12 @@ export const makeStore = () => {
       [standingsApi.reducerPath]: standingsApi.reducer,
     },
     middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(teamApi.middleware, playerApi.middleware, leagueLeadersApi.middleware, standingsApi.middleware),
+      getDefaultMiddleware({ serializableCheck: false }).concat(
+        teamApi.middleware,
+        playerApi.middleware,
+        leagueLeadersApi.middleware,
+        standingsApi.middleware,
+      ),
   });
 };
 

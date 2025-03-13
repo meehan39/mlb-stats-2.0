@@ -9,7 +9,7 @@ export default function Icon({ path, children }: SubheaderIconProps) {
   return (
     <div
       onClick={() => !shouldHighlight && router.push(path, { scroll: false })}
-      className={`rounded-lg border border-transparent p-2 transition-colors ${shouldHighlight ? 'text-sky-300 dark:text-sky-600' : 'text-black dark:text-white cursor-pointer hover:border-slate-700 hover:bg-slate-800/30'}`}>
+      className={`rounded-lg border border-transparent p-2 ${shouldHighlight ? 'text-sky-300 dark:text-sky-600' : 'text-black dark:text-white cursor-pointer hover:bg-slate-600/30'}`}>
       {children}
     </div>
   );

@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 
 export interface SubheaderState {
-  value: string | null;
+  value: string | JSX.Element | null;
 }
 
 const initialState: SubheaderState = {
@@ -13,7 +13,10 @@ export const subheaderSlice = createSlice({
   name: 'subheader',
   initialState,
   reducers: {
-    setSubheader: (state, action: PayloadAction<string | null>) => {
+    setSubheader: (
+      state,
+      action: PayloadAction<string | JSX.Element | null>,
+    ) => {
       state.value = action.payload;
     },
   },

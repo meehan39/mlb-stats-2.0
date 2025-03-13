@@ -1,10 +1,17 @@
 import type { TeamKey } from '../../../constants/types';
 
-export interface GetStandingsResponse {
-  [key in TeamKey]: TeamHomeRuns;
+export type GetStandingsResponse = TeamStandingsStats[];
+
+export interface TeamStandingsStats {
+  ranking: number;
+  teamKey: TeamKey;
+  total: StandingsStatData;
+  topFour: StandingsStatData;
 }
 
-export interface TeamHomeRuns {
-  topFour: number;
-  total: number;
+export interface StandingsStatData {
+  homeRuns: number;
+  games: number;
+  atBats: number;
+  hits: number;
 }
