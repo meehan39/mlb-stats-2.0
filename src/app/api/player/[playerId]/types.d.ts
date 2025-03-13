@@ -4,7 +4,6 @@ import type { PlayerInfo, PlayerStats } from '../../utils/types';
 
 export interface GetPlayerResponse {
   info: PlayerInfo;
-  todaysGame: PlayerGame | null;
   stats: PlayerStats;
   metaData: PlayerMetaData;
 }

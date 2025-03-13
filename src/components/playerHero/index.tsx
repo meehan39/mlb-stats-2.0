@@ -13,39 +13,64 @@ import type {
 } from '../../app/api/utils/types';
 import type { TeamKey } from '../../constants/types';
 import React from 'react';
+import {
+  useGetPlayerQuery,
+  useGetTodaysGameQuery,
+} from '../../store/api/player/query';
+import { useAppSelector } from '../../store/hooks';
+import { selectTimeSpan } from '../../store/timeSpan/slice';
 
 export default function PlayerHero({
-  player,
-  todaysGame,
+  playerId,
   showOwner,
   xl,
   className,
   onClick,
+  statsGridItems,
   children,
 }: PlayerHeroProps) {
-  const isLoading = !player;
+  const timeSpan = useAppSelector(selectTimeSpan);
+  const { data, isLoading } = useGetPlayerQuery({
+    playerId,
+    timeSpan,
+  });
+  const { data: todaysGameData, isLoading: isTodaysGameLoading } =
+    useGetTodaysGameQuery({
+      playerId,
+    });
   return (
     <div
       onClick={
         onClick !== undefined
           ? () => {
-              if (!isLoading && player) {
+              if (!isLoading && data) {
                 onClick && onClick();
               }
             }
           : () => {}
       }
       className={`${onClick ? `clickable-card` : 'card'} w-full h-full grid grid-cols-7 ${xl && 'md:grid-cols-12'} gap-0`}>
-      <PlayerImage player={player} isLoading={isLoading} xl={xl} />
+      <PlayerImage player={data?.info} isLoading={isLoading} xl={xl} />
       <PlayerInfo
-        player={player}
+        player={data?.info}
         showOwner={showOwner}
         isLoading={isLoading}
         xl={xl}
         className={className}>
+        {statsGridItems && (
+          <StatGrid
+            isLoading={isLoading}
+            columns={3}
+            stats={statsGridItems ? statsGridItems(data) : []}
+          />
+        )}
         {children}
       </PlayerInfo>
-      <TodaysGame isLoading={isLoading} todaysGame={todaysGame} xl={xl} />
+      <TodaysGame
+        isLoading={isTodaysGameLoading}
+        todaysGame={todaysGameData}
+        xl={xl}
+      />
     </div>
   );
 }

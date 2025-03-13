@@ -14,11 +14,6 @@ import type { TeamProps } from './types';
 export default function Team({ teamKey }: TeamProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const timeSpan = useAppSelector(selectTimeSpan);
-  const { data, isLoading } = useGetTeamStatsQuery({
-    teamId: teamKey,
-    timeSpan,
-  });
 
   useEffect(() => {
     dispatch(setSubheader(LEAGUE_DATA[teamKey as TeamKey].teamName));
@@ -31,23 +26,21 @@ export default function Team({ teamKey }: TeamProps) {
         gap-4
         
       `}>
-      {(data ?? Array.from({ length: 6 })).map((_, i) => (
+      {LEAGUE_DATA[teamKey as TeamKey].roster.map((player, i) => (
         <PlayerHero
           key={i}
-          player={data?.[i]?.info}
-          todaysGame={data?.[i]?.game}
+          playerId={player.id}
           className='flex justify-around'
-          onClick={() => router.push(`/player/${data?.[i]?.info.playerId}`)}>
-          <StatGrid
-            isLoading={isLoading}
-            columns={3}
-            stats={[
-              { label: 'HR', value: data?.[i]?.stats?.homeRuns ?? 0 },
-              { label: 'GP', value: data?.[i]?.stats?.gamesPlayed ?? 0 },
-              { label: 'AB', value: data?.[i]?.stats?.atBats ?? 0 },
-            ]}
-          />
-        </PlayerHero>
+          statsGridItems={data => [
+            { label: 'HR', value: data?.stats?.homeRuns ?? 0 },
+            { label: 'GP', value: data?.stats?.gamesPlayed ?? 0 },
+            { label: 'AB', value: data?.stats?.atBats ?? 0 },
+          ]}
+          onClick={() => {
+            dispatch(setSubheader(player.name));
+            return router.push(`/player/${player.id}`);
+          }}
+        />
       ))}
     </div>
   );

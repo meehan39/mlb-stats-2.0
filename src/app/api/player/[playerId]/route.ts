@@ -1,9 +1,4 @@
-import {
-  getPlayerData,
-  parseQueryString,
-  getTodaysGame,
-  getOwner,
-} from '../../utils';
+import { getPlayerData, parseQueryString, getOwner } from '../../utils';
 import { formatPlayerInfo } from '../../utils';
 import type { TimeSpan } from '../../../../constants/types';
 import type { GetPlayerResponse } from './types';
@@ -16,7 +11,6 @@ export async function GET(request: Request, props: { params: Promise<{ playerId:
       (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
     const playerId = parseInt(params.playerId);
     const player = await getPlayerData(playerId, timeSpan);
-    const game = await getTodaysGame(playerId, player?.currentTeam?.id);
     const {
       batSide,
       currentAge,
@@ -28,7 +22,6 @@ export async function GET(request: Request, props: { params: Promise<{ playerId:
     const responseData: GetPlayerResponse = {
       info: { ...formatPlayerInfo(player), owner: getOwner(playerId) },
       stats: player?.stats?.[0]?.splits?.[0]?.stat ?? {},
-      todaysGame: game,
       metaData: {
         bats: batSide?.code,
         currentAge,

@@ -1,42 +1,27 @@
 'use client';
+import PlayerHero from '../playerHero';
+import StatGrid from '../statGrid';
+import Loadable from '../loadable';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
 import { useState, useEffect } from 'react';
-
-import type { PlayerProps } from './types';
-
-import PlayerHero from '../playerHero';
-import StatGrid from '../statGrid';
 import { setSubheader } from '../../store/subheader/slice';
 import { useGetPlayerQuery } from '../../store/api/player/query';
-import type {
-  PlayerGame,
-  PlayerInfo,
-  PlayerStats,
-} from '../../app/api/utils/types';
-import Loadable from '../loadable';
 import { SEASON, timeSpanValues } from '../../constants';
-import type { PlayerMetaData } from '../../app/api/player/[playerId]/types';
+import type { PlayerProps } from './types';
+import type { PlayerStats } from '../../app/api/utils/types';
 
 export default function Player({ playerId }: PlayerProps) {
   const dispatch = useAppDispatch();
   const timeSpan = useAppSelector(selectTimeSpan);
   const { data, isLoading } = useGetPlayerQuery({ playerId, timeSpan });
 
-  const [playerInfo, setPlayerInfo] = useState<PlayerInfo | null>(null);
   const [playerStats, setPlayerStats] = useState<PlayerStats | null>(null);
-  const [todaysGame, setTodaysGame] = useState<PlayerGame | null>(null);
-  const [playerMetaData, setPlayerMetaData] = useState<PlayerMetaData | null>(
-    null,
-  );
 
   useEffect(() => {
     if (data) {
-      const { info, todaysGame, stats, metaData } = data;
-      setPlayerInfo(info);
-      setTodaysGame(todaysGame);
+      const { info, stats } = data;
       setPlayerStats(stats);
-      setPlayerMetaData(metaData);
       dispatch(setSubheader(info.fullName));
     }
   }, [data]);
@@ -44,27 +29,22 @@ export default function Player({ playerId }: PlayerProps) {
   return (
     <div className='flex flex-col items-center gap-4 w-full'>
       <PlayerHero
-        player={playerInfo}
-        todaysGame={todaysGame}
+        playerId={playerId}
         showOwner
         xl
-        className='w-full flex'>
-        <StatGrid
-          isLoading={isLoading}
-          columns={3}
-          stats={[
-            { label: 'Pos', value: playerMetaData?.primaryPosition ?? '' },
-            { label: 'Bats', value: playerMetaData?.bats ?? '' },
-            { label: 'Age', value: playerMetaData?.currentAge ?? '' },
-            { label: 'Height', value: playerMetaData?.height ?? '' },
-            { label: 'Weight', value: playerMetaData?.weight ?? '' },
-            {
-              label: 'MLB Debut',
-              value: playerMetaData?.mlbDebutDate?.slice(0, 4) ?? '',
-            },
-          ]}
-        />
-      </PlayerHero>
+        className='w-full flex'
+        statsGridItems={data => [
+          { label: 'Pos', value: data?.metaData?.primaryPosition ?? '' },
+          { label: 'Bats', value: data?.metaData?.bats ?? '' },
+          { label: 'Age', value: data?.metaData?.currentAge ?? '' },
+          { label: 'Height', value: data?.metaData?.height ?? '' },
+          { label: 'Weight', value: data?.metaData?.weight ?? '' },
+          {
+            label: 'MLB Debut',
+            value: data?.metaData?.mlbDebutDate?.slice(0, 4) ?? '',
+          },
+        ]}
+      />
       <div className='w-full flex flex-col gap-4'>
         <span className='text-gray-700 dark:text-gray-400 text-lg'>
           {timeSpan === 'season'
