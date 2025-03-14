@@ -1,6 +1,7 @@
 'use client';
 import PlayerHero from '../playerHero';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
@@ -40,36 +41,39 @@ export default function LeagueLeaders() {
       dataLength={leagueLeaders.length}
       next={() => setOffset(leagueLeaders.length)}
       hasMore={Boolean(data?.length) || !leagueLeaders.length}
-      loader={<Loader />}
+      loader={<Loader offset={offset} />}
       className='flex flex-col gap-4'>
       {leagueLeaders.map((playerId, index) => {
         return (
-          <PlayerHero
-            key={index}
-            playerId={playerId}
-            onClick={() => router.push(`/player/${playerId}`)}
-            xl
-            showOwner
-            statsGridItems={data => {
-              const { homeRuns, hits, runs, rbi, atBats, avg } =
-                data?.stats ?? {};
-              return [
-                { label: 'HR', value: homeRuns ?? 0 },
-                { label: 'H', value: hits ?? 0 },
-                { label: 'R', value: runs ?? 0 },
-                { label: 'RBI', value: rbi ?? 0 },
-                { label: 'AB', value: atBats ?? 0 },
-                { label: 'AVG', value: avg ?? '.000' },
-              ];
-            }}
-          />
+          <React.Fragment key={index}>
+            <Divider index={index} />
+            <PlayerHero
+              key={index}
+              playerId={playerId}
+              onClick={() => router.push(`/player/${playerId}`)}
+              xl
+              showOwner
+              statsGridItems={data => {
+                const { homeRuns, hits, runs, rbi, atBats, avg } =
+                  data?.stats ?? {};
+                return [
+                  { label: 'HR', value: homeRuns ?? 0 },
+                  { label: 'H', value: hits ?? 0 },
+                  { label: 'R', value: runs ?? 0 },
+                  { label: 'RBI', value: rbi ?? 0 },
+                  { label: 'AB', value: atBats ?? 0 },
+                  { label: 'AVG', value: avg ?? '.000' },
+                ];
+              }}
+            />
+          </React.Fragment>
         );
       })}
     </InfiniteScroll>
   );
 }
 
-function Loader() {
+function Loader({ offset }: { offset: number }) {
   const statsGrid = () => [
     { label: 'HR', value: 0 },
     { label: 'H', value: 0 },
@@ -80,11 +84,21 @@ function Loader() {
   ];
   return (
     <div className='flex flex-col gap-4'>
-      <PlayerHero xl statsGridItems={statsGrid} />
-      <PlayerHero xl statsGridItems={statsGrid} />
-      <PlayerHero xl statsGridItems={statsGrid} />
-      <PlayerHero xl statsGridItems={statsGrid} />
-      <PlayerHero xl statsGridItems={statsGrid} />
+      {new Array(5).fill(null).map((_, index) => (
+        <React.Fragment key={index}>
+          <Divider index={offset + index} />
+          <PlayerHero key={index} xl statsGridItems={statsGrid} />
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+function Divider({ index }: { index: number }) {
+  return (
+    <div className='flex items-center gap-2 secondary-text'>
+      <span>{index + 1}</span>
+      <div className='h-px w-full bg-gray-700 dark:bg-gray-400' />
     </div>
   );
 }
