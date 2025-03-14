@@ -4,7 +4,7 @@ import type { PlayerGame, PlayerInfo } from '../../app/api/utils/types';
 import type { StatItem } from '../statGrid/types';
 
 export interface PlayerHeroProps {
-  playerId: number;
+  playerId?: number;
   className?: string;
   onClick?: () => void;
   showOwner?: boolean;

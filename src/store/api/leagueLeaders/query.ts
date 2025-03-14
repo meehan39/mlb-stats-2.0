@@ -4,14 +4,19 @@ import type { GetLeagueLeadersResponse } from '../../../app/api/leagueLeaders/ty
 
 export interface GetLeagueLeadersRequest {
   timeSpan?: TimeSpan;
+  offset?: number;
 }
 
 export const leagueLeadersApi = createApi({
   reducerPath: 'leagueLeadersApi',
   baseQuery: fetchBaseQuery({ baseUrl: '/api/leagueLeaders' }),
   endpoints: builder => ({
-    getLeagueLeaders: builder.query<GetLeagueLeadersResponse, GetLeagueLeadersRequest>({
-      query: ({ timeSpan }) => `?timeSpan=${timeSpan ?? 'season'}`,
+    getLeagueLeaders: builder.query<
+      GetLeagueLeadersResponse,
+      GetLeagueLeadersRequest
+    >({
+      query: ({ timeSpan, offset }) =>
+        `?timeSpan=${timeSpan ?? 'season'}&offset=${offset ?? 0}`,
     }),
   }),
 });

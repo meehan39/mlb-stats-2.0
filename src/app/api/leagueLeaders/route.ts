@@ -6,8 +6,12 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request) {
   const timeSpan =
   (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
+  const offset = parseQueryString(request.url)?.offset as string;
 
-  const leagueLeaders = await getLeagueLeaders(timeSpan);
+  const leagueLeaders = await getLeagueLeaders(
+    timeSpan,
+    parseInt(offset ?? '0'),
+  );
   const response: GetLeagueLeadersResponse =
     leagueLeaders?.map(player => ({
       playerId: player.person.id,

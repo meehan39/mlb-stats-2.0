@@ -151,28 +151,28 @@ export const LEAGUE_DATA: LeagueData = {
 export const MLB_BASE_API = 'https://statsapi.mlb.com';
 
 export const PATHS = {
-    STATS: (playerId: number, timeSpan: TimeSpan = 'season') =>
-        `${MLB_BASE_API}/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,${
-            timeSpan === 'season'
-                ? `type=season,season=${SEASON}`
-                : `type=byDateRange,startDate=${getDay(timeSpan, Day.FIRST)},endDate=${getDay(timeSpan, Day.LAST)}`
-        },sportId=1),currentTeam`,
-    LEAGUE_LEADERS: (timeSpan: TimeSpan) =>
-        `${MLB_BASE_API}/api/v1/stats/leaders?leaderCategories=homeRuns${
-            timeSpan === 'season'
-                ? `&season=${SEASON}`
-                : `&statType=byDateRange&startDate=${getDay(timeSpan, Day.FIRST)}&endDate=${getDay(timeSpan, Day.LAST)}`
-        }&statGroup=hitting&limit=50`,
-    SCHEDULE: (teamId: number) =>
-        `${MLB_BASE_API}/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
-    GAME_STATS: (playerId: number, gameId: number) =>
-        `${MLB_BASE_API}/api/v1/people/${playerId}/stats/game/${gameId}?group=hitting`,
-    PLAYER_HERO_IMAGE: (playerId: number) =>
-        `https://securea.mlb.com/mlb/images/players/head_shot/${playerId}.jpg`,
-    PLAYER_ICON_IMAGE: (playerId: number) =>
-        `https://midfield.mlbstatic.com/v1/people/${playerId}/spots/60`,
-    TEAM_LOGO: (teamId: number) =>
-        `https://midfield.mlbstatic.com/v1/team/${teamId}/spots/72`,
+  STATS: (playerId: number, timeSpan: TimeSpan = 'season') =>
+    `${MLB_BASE_API}/api/v1/people/${playerId}?hydrate=stats(group=%5Bhitting%5D,${
+      timeSpan === 'season'
+        ? `type=season,season=${SEASON}`
+        : `type=byDateRange,startDate=${getDay(timeSpan, Day.FIRST)},endDate=${getDay(timeSpan, Day.LAST)}`
+    },sportId=1),currentTeam`,
+  LEAGUE_LEADERS: (timeSpan: TimeSpan, offset = 0) =>
+    `${MLB_BASE_API}/api/v1/stats/leaders?leaderCategories=homeRuns${
+      timeSpan === 'season'
+        ? `&season=${SEASON}`
+        : `&statType=byDateRange&startDate=${getDay(timeSpan, Day.FIRST)}&endDate=${getDay(timeSpan, Day.LAST)}`
+    }&statGroup=hitting&limit=10&offset=${offset}`,
+  SCHEDULE: (teamId: number) =>
+    `${MLB_BASE_API}/api/v1/schedule?sportId=1&teamId=${teamId}&hydrate=team`,
+  GAME_STATS: (playerId: number, gameId: number) =>
+    `${MLB_BASE_API}/api/v1/people/${playerId}/stats/game/${gameId}?group=hitting`,
+  PLAYER_HERO_IMAGE: (playerId: number) =>
+    `https://securea.mlb.com/mlb/images/players/head_shot/${playerId}.jpg`,
+  PLAYER_ICON_IMAGE: (playerId: number) =>
+    `https://midfield.mlbstatic.com/v1/people/${playerId}/spots/60`,
+  TEAM_LOGO: (teamId: number) =>
+    `https://midfield.mlbstatic.com/v1/team/${teamId}/spots/72`,
 };
 
 enum Day {

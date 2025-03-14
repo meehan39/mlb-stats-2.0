@@ -12,10 +12,10 @@ import type {
   TeamData,
 } from '../../app/api/utils/types';
 import type { TeamKey } from '../../constants/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  useGetPlayerQuery,
-  useGetTodaysGameQuery,
+  useLazyGetPlayerQuery,
+  useLazyGetTodaysGameQuery,
 } from '../../store/api/player/query';
 import { useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
@@ -30,36 +30,45 @@ export default function PlayerHero({
   children,
 }: PlayerHeroProps) {
   const timeSpan = useAppSelector(selectTimeSpan);
-  const { data, isLoading } = useGetPlayerQuery({
-    playerId,
-    timeSpan,
-  });
-  const { data: todaysGameData, isLoading: isTodaysGameLoading } =
-    useGetTodaysGameQuery({
-      playerId,
-    });
+
+  const [getPlayer, { data, isLoading }] = useLazyGetPlayerQuery();
+  const [
+    getTodaysGame,
+    { data: todaysGameData, isLoading: isTodaysGameLoading },
+  ] = useLazyGetTodaysGameQuery();
+
+  useEffect(() => {
+    if (playerId) {
+      getPlayer({ playerId, timeSpan });
+      getTodaysGame({ playerId });
+    }
+  }, [playerId, timeSpan]);
   return (
     <div
       onClick={
         onClick !== undefined
           ? () => {
               if (!isLoading && data) {
-                onClick && onClick();
+                onClick();
               }
             }
           : () => {}
       }
       className={`${onClick ? `clickable-card` : 'card'} w-full h-full grid grid-cols-7 ${xl && 'md:grid-cols-12'} gap-0`}>
-      <PlayerImage player={data?.info} isLoading={isLoading} xl={xl} />
+      <PlayerImage
+        player={data?.info}
+        isLoading={isLoading || !playerId}
+        xl={xl}
+      />
       <PlayerInfo
         player={data?.info}
         showOwner={showOwner}
-        isLoading={isLoading}
+        isLoading={isLoading || !playerId}
         xl={xl}
         className={className}>
         {statsGridItems && (
           <StatGrid
-            isLoading={isLoading}
+            isLoading={isLoading || !playerId}
             columns={3}
             stats={statsGridItems ? statsGridItems(data) : []}
           />
@@ -67,7 +76,7 @@ export default function PlayerHero({
         {children}
       </PlayerInfo>
       <TodaysGame
-        isLoading={isTodaysGameLoading}
+        isLoading={isTodaysGameLoading || !playerId}
         todaysGame={todaysGameData}
         xl={xl}
       />

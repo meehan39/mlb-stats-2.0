@@ -4,6 +4,7 @@ import { LEAGUE_DATA, PATHS } from '../../../constants';
 import type { TeamKey, TimeSpan } from '../../../constants/types';
 import type { PlayerGame, PlayerInfo } from './types';
 import type MlbApi from './MlbApi';
+import { createVerify } from 'crypto';
 
 export const getPlayerData = async (
   playerId: number,
@@ -21,13 +22,15 @@ export const getPlayerData = async (
 
 export const getLeagueLeaders = async (
   timeSpan: TimeSpan,
+  offset = 0,
 ): Promise<MlbApi.LeagueLeaders.Leader[] | null> => {
   try {
     const response: MlbApi.LeagueLeaders.Response = await axios.get(
-      PATHS.LEAGUE_LEADERS(timeSpan),
+      PATHS.LEAGUE_LEADERS(timeSpan, offset),
     );
     return response.data.leagueLeaders[0].leaders;
   } catch {
+    createVerify;
     return null;
   }
 };

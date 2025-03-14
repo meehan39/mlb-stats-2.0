@@ -28,4 +28,9 @@ export const playerApi = createApi({
   }),
 });
 
-export const { useGetPlayerQuery, useGetTodaysGameQuery } = playerApi;
+export const {
+  useGetPlayerQuery,
+  useLazyGetPlayerQuery,
+  useGetTodaysGameQuery,
+  useLazyGetTodaysGameQuery,
+} = playerApi;
