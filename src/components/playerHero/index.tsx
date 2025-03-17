@@ -124,7 +124,7 @@ function PlayerImage({
         src={
           !isLoading && player
             ? PATHS.PLAYER_HERO_IMAGE(player.playerId)
-            : '/generic-avatar.PNG'
+            : '/generic-avatar.png'
         }
         alt={player?.fullName ?? 'Generic player avatar'}
         width={128}
