@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
 import { setSubheader } from '../../store/subheader/slice';
 import { useGetLeagueLeadersQuery } from '../../store/api/leagueLeaders/query';
-import { useRouter } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 export default function LeagueLeaders() {
@@ -39,8 +38,9 @@ export default function LeagueLeaders() {
     <InfiniteScroll
       dataLength={leagueLeaders.length}
       next={() => setOffset(leagueLeaders.length)}
-      hasMore={Boolean(data?.length) || !leagueLeaders.length}
+      hasMore={Boolean(data?.length) || data === undefined}
       loader={<Loader offset={offset} />}
+      endMessage={<div className='w-full flex justify-center'>End of League Leaders</div>}
       className='flex flex-col gap-4'>
       {leagueLeaders.map((playerId, index) => {
         return (
