@@ -16,10 +16,10 @@ export async function GET(request: Request) {
         roster.map(async player => {
           const data = await getPlayerData(player.id, timeSpan);
           return {
-            homeRuns: data?.stats[0]?.splits[0]?.stat?.homeRuns ?? 0,
-            games: data?.stats[0]?.splits[0]?.stat?.gamesPlayed ?? 0,
-            atBats: data?.stats[0]?.splits[0]?.stat?.atBats ?? 0,
-            hits: data?.stats[0]?.splits[0]?.stat?.hits ?? 0,
+            homeRuns: data?.stats?.[0]?.splits[0]?.stat?.homeRuns ?? 0,
+            games: data?.stats?.[0]?.splits[0]?.stat?.gamesPlayed ?? 0,
+            atBats: data?.stats?.[0]?.splits[0]?.stat?.atBats ?? 0,
+            hits: data?.stats?.[0]?.splits[0]?.stat?.hits ?? 0,
           };
         }),
       );

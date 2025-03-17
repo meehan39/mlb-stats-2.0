@@ -233,13 +233,10 @@ export function MonthOverMonthHRs({ playerId }: { playerId?: number }) {
         className='h-full w-full pt-4 -ml-4'>
         <BarChart
           accessibilityLayer
-          data={data?.map((value, index) => {
-            console.log('value', value);
-            return {
-              month: months[index],
-              homeRuns: value,
-            };
-          })}>
+          data={data?.map((value, index) => ({
+            month: months[index],
+            homeRuns: value,
+          }))}>
           <ChartTooltip content={<ChartTooltipContent />} />
           <XAxis
             dataKey='month'

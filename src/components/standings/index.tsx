@@ -6,9 +6,9 @@ import { selectTimeSpan } from '../../store/timeSpan/slice';
 import { setSubheader } from '../../store/subheader/slice';
 import { useGetStandingsQuery } from '../../store/api/standings/query';
 import { LEAGUE_DATA } from '../../constants';
+import Tabs from '../tabs';
 import type { Row } from '../table/types';
 import type { TeamKey } from '../../constants/types';
-import Tabs from '../tabs';
 
 export const dynamic = 'force-dynamic';
 export default function Standings() {
@@ -76,5 +76,7 @@ export default function Standings() {
 }
 
 const formatRate = (homeruns: number, control: number) => {
-  return `${((homeruns / control) * 100).toFixed(1)}%`;
+  return homeruns && control
+    ? `${((homeruns / control) * 100).toFixed(1)}%`
+    : '0%';
 };
