@@ -6,7 +6,7 @@ import type { StatItem } from '../statGrid/types';
 export interface PlayerHeroProps {
   playerId?: number;
   className?: string;
-  onClick?: () => void;
+  playerPageLink?: boolean;
   showOwner?: boolean;
   xl?: boolean;
   statsGridItems?: (player?: GetPlayerResponse) => StatItem[];

@@ -14,72 +14,96 @@ import type {
 import type { TeamKey } from '../../constants/types';
 import React, { useEffect } from 'react';
 import {
+  useLazyGetMonthOverMonthStatsQuery,
   useLazyGetPlayerQuery,
   useLazyGetTodaysGameQuery,
 } from '../../store/api/player/query';
 import { useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
+import { Bar, BarChart, XAxis, YAxis } from 'recharts';
+
+import {
+  Carousel,
+  CarouselArrows,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
+import { useRouter } from 'next/navigation';
 
 export default function PlayerHero({
   playerId,
   showOwner,
   xl,
   className,
-  onClick,
+  playerPageLink,
   statsGridItems,
   children,
 }: PlayerHeroProps) {
   const timeSpan = useAppSelector(selectTimeSpan);
 
   const [getPlayer, { data, isLoading }] = useLazyGetPlayerQuery();
-  const [
-    getTodaysGame,
-    { data: todaysGameData, isLoading: isTodaysGameLoading },
-  ] = useLazyGetTodaysGameQuery();
 
   useEffect(() => {
     if (playerId) {
       getPlayer({ playerId, timeSpan });
-      getTodaysGame({ playerId });
     }
   }, [playerId, timeSpan]);
   return (
     <div
-      onClick={
-        onClick !== undefined
-          ? () => {
-              if (!isLoading && data) {
-                onClick();
-              }
-            }
-          : () => {}
-      }
-      className={`${onClick ? `clickable-card` : 'card'} w-full h-full grid grid-cols-7 ${xl && 'md:grid-cols-12'} gap-0`}>
+      className={`card w-full h-full grid grid-cols-7 ${xl && 'md:grid-cols-12'} gap-0`}>
       <PlayerImage
         player={data?.info}
-        isLoading={isLoading || !playerId}
+        isLoading={isLoading || !playerId || !data}
         xl={xl}
       />
       <PlayerInfo
         player={data?.info}
         showOwner={showOwner}
-        isLoading={isLoading || !playerId}
+        isLoading={isLoading || !playerId || !data}
         xl={xl}
+        playerPageLink={playerPageLink}
         className={className}>
         {statsGridItems && (
           <StatGrid
-            isLoading={isLoading || !playerId}
+            isLoading={isLoading || !playerId || !data}
             columns={3}
             stats={statsGridItems ? statsGridItems(data) : []}
           />
         )}
         {children}
       </PlayerInfo>
-      <TodaysGame
-        isLoading={isTodaysGameLoading || !playerId}
-        todaysGame={todaysGameData}
-        xl={xl}
-      />
+
+      {xl ? (
+        <div
+          className={`${xl ? 'col-span-7 md:col-span-5 pl-0 md:pl-2 pt-2 md:pt-0 border-t mt-2 md:border-t-0 md:mt-0 md:border-l' : 'col-span-5 border-t pt-2'} border-neutral-500/25 dark:border-neutral-400/25`}>
+          <Carousel
+            className='h-full'
+            opts={{
+              loop: true,
+              align: 'center',
+              startIndex: timeSpan === 'season' ? 0 : 1,
+            }}>
+            <CarouselContent className='h-full'>
+              <CarouselItem>
+                <TodaysGame playerId={playerId} xl={xl} />
+              </CarouselItem>
+              <CarouselItem>
+                <MonthOverMonthHRs playerId={playerId} />
+              </CarouselItem>
+            </CarouselContent>
+            <CarouselArrows />
+          </Carousel>
+        </div>
+      ) : (
+        <div className='col-span-5 border-t pt-2 h-24 border-neutral-500/25 dark:border-neutral-400/25'>
+          {timeSpan === 'season' ? (
+            <TodaysGame playerId={playerId} xl={xl} />
+          ) : (
+            <MonthOverMonthHRs playerId={playerId} />
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -116,6 +140,7 @@ function PlayerInfo({
   showOwner,
   isLoading,
   xl,
+  playerPageLink,
   className,
   children,
 }: {
@@ -123,9 +148,11 @@ function PlayerInfo({
   player?: PlayerInfo | null;
   showOwner?: boolean;
   xl?: boolean;
+  playerPageLink?: boolean;
   className?: string;
   children?: React.ReactNode;
 }) {
+  const router = useRouter();
   return (
     <div
       className={`col-span-5 flex flex-col w-full ${xl && 'md:flex-row gap-3 md:pr-2'}`}>
@@ -133,7 +160,15 @@ function PlayerInfo({
         <div className={`w-full flex flex-col ${xl && 'md:h-full'}`}>
           <div className='flex justify-between text-xl'>
             <Loadable isLoading={isLoading} type='text-xl' width='w-36'>
-              <span>{player?.fullName}</span>
+              {playerPageLink && player?.playerId ? (
+                <a
+                  className='cursor-pointer'
+                  onClick={() => router.push(`/player/${player?.playerId}`)}>
+                  {player?.fullName}
+                </a>
+              ) : (
+                <span>{player?.fullName}</span>
+              )}
             </Loadable>
             <Loadable isLoading={isLoading} type='text-xl' width='w-10'>
               <span className='secondary-text'>
@@ -151,7 +186,9 @@ function PlayerInfo({
               width='w-24'
               className='secondary-text'>
               {player?.owner ? (
-                <a href={`/team/${player.owner}`}>
+                <a
+                  className='cursor-pointer'
+                  onClick={() => router.push(`/team/${player.owner}`)}>
                   {LEAGUE_DATA[player.owner as TeamKey].teamName}
                 </a>
               ) : (
@@ -166,47 +203,99 @@ function PlayerInfo({
   );
 }
 
-export function TodaysGame({
-  isLoading,
-  todaysGame,
-  xl = false,
-}: {
-  isLoading: boolean;
-  todaysGame?: PlayerGame | null;
-  xl?: boolean;
-}) {
+export function MonthOverMonthHRs({ playerId }: { playerId?: number }) {
+  const months = [
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+  ];
+  const [getMonthOverMonthStats, { data, isLoading }] =
+    useLazyGetMonthOverMonthStatsQuery();
+
+  useEffect(() => {
+    if (playerId) {
+      getMonthOverMonthStats({ playerId });
+    }
+  }, [playerId]);
   return (
     <Loadable
-      isLoading={isLoading}
+      isLoading={isLoading || !playerId}
       type='spinner'
       width='w-10'
       height='h-10'
-      className={`
-      ${xl ? 'col-span-7 md:col-span-5 pl-0 md:pl-2 pt-2 md:pt-0 border-t mt-2 md:border-t-0 md:mt-0 md:border-l' : 'col-span-5 border-t pt-2'}
-      w-full h-full min-h-24 flex flex-col justify-center items-center 
-      border-neutral-500/25 dark:border-neutral-400/25`}>
-      {todaysGame ? (
+      className='w-full h-full min-h-24 flex flex-col justify-center items-center'>
+      <ChartContainer
+        config={{ homeRuns: { label: 'Home Runs' } }}
+        className='h-full w-full pt-4 -ml-4'>
+        <BarChart
+          accessibilityLayer
+          data={data?.map((value, index) => {
+            console.log('value', value);
+            return {
+              month: months[index],
+              homeRuns: value,
+            };
+          })}>
+          <ChartTooltip content={<ChartTooltipContent />} />
+          <XAxis
+            dataKey='month'
+            tickLine={false}
+            axisLine={false}
+            tickFormatter={value => value.slice(0, 3)}
+          />
+          <YAxis
+            dataKey='homeRuns'
+            allowDecimals={false}
+            tickLine={false}
+            axisLine={false}
+            label={{ value: 'HR', angle: -90, position: '' }}
+          />
+          <Bar key={1} dataKey='homeRuns' radius={4} />
+        </BarChart>
+      </ChartContainer>
+    </Loadable>
+  );
+}
+
+export function TodaysGame({
+  playerId,
+  xl = false,
+}: {
+  playerId?: number;
+  xl?: boolean;
+}) {
+  const [getTodaysGame, { data, isLoading, isUninitialized }] =
+    useLazyGetTodaysGameQuery();
+  useEffect(() => {
+    if (playerId) {
+      getTodaysGame({ playerId });
+    }
+  }, [playerId]);
+  return (
+    <Loadable
+      isLoading={isLoading || !playerId || isUninitialized}
+      type='spinner'
+      width='w-10'
+      height='h-10'
+      className='w-full h-full flex flex-col justify-center items-center'>
+      {data ? (
         <>
           <div className='flex flex-col h-full w-full justify-center'>
             <div className='text-sm secondary-text whitespace-nowrap flex justify-between w-full'>
-              <span>{getGameState(todaysGame)}</span>
+              <span>{getGameState(data)}</span>
               <span>
-                {todaysGame.state !== 'scheduled' && !xl
-                  ? `${todaysGame.stats.homeRuns ?? 0} HR${todaysGame.stats.homeRuns !== 1 ? 's' : ''}`
-                  : todaysGame.location}
+                {data.state !== 'scheduled' && !xl
+                  ? `${data.stats.homeRuns ?? 0} HR${data.stats.homeRuns !== 1 ? 's' : ''}`
+                  : data.location}
               </span>
             </div>
             <div className='text-sm flex flex-col justify-between h-full w-full'>
-              <ScoreBugItem
-                team={todaysGame.home}
-                state={todaysGame.state}
-                xl={xl}
-              />
-              <ScoreBugItem
-                team={todaysGame.away}
-                state={todaysGame.state}
-                xl={xl}
-              />
+              <ScoreBugItem team={data.home} state={data.state} xl={xl} />
+              <ScoreBugItem team={data.away} state={data.state} xl={xl} />
             </div>
           </div>
           {xl && (
@@ -214,15 +303,15 @@ export function TodaysGame({
               isLoading={isLoading}
               columns={3}
               stats={[
-                { label: 'HR', value: todaysGame.stats.homeRuns ?? 0 },
+                { label: 'HR', value: data.stats.homeRuns ?? 0 },
                 {
                   label: 'H',
-                  value: `${todaysGame.stats.hits ?? 0}-${todaysGame.stats.atBats ?? 0}`,
+                  value: `${data.stats.hits ?? 0}-${data.stats.atBats ?? 0}`,
                 },
-                { label: 'BB', value: todaysGame.stats.baseOnBalls ?? 0 },
-                { label: 'K', value: todaysGame.stats.strikeOuts ?? 0 },
-                { label: 'RBI', value: todaysGame.stats.rbi ?? 0 },
-                { label: 'R', value: todaysGame.stats.runs ?? 0 },
+                { label: 'BB', value: data.stats.baseOnBalls ?? 0 },
+                { label: 'K', value: data.stats.strikeOuts ?? 0 },
+                { label: 'RBI', value: data.stats.rbi ?? 0 },
+                { label: 'R', value: data.stats.runs ?? 0 },
               ]}
             />
           )}

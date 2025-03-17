@@ -12,7 +12,6 @@ import { useRouter } from 'next/navigation';
 export const dynamic = 'force-dynamic';
 export default function LeagueLeaders() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const timeSpan = useAppSelector(selectTimeSpan);
   const [offset, setOffset] = useState(0);
 
@@ -48,9 +47,8 @@ export default function LeagueLeaders() {
           <React.Fragment key={index}>
             <Divider index={index} />
             <PlayerHero
-              key={index}
               playerId={playerId}
-              onClick={() => router.push(`/player/${playerId}`)}
+              playerPageLink
               xl
               showOwner
               statsGridItems={data => {
@@ -87,7 +85,7 @@ function Loader({ offset }: { offset: number }) {
       {new Array(5).fill(null).map((_, index) => (
         <React.Fragment key={index}>
           <Divider index={offset + index} />
-          <PlayerHero key={index} xl statsGridItems={statsGrid} />
+          <PlayerHero key={index} xl statsGridItems={statsGrid} showOwner />
         </React.Fragment>
       ))}
     </div>
