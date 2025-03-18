@@ -90,7 +90,7 @@ function TBody({ rows: rowProps, headers, loadingRows }: TableBodyProps) {
                       type={'text-sm'}
                       width={loadingWidth ?? 'w-5'}
                       className={`flex ${align === 'right' ? 'justify-end' : 'justify-start'}`}>
-                      {cells?.[index]}
+                      {cells?.[index].display}
                     </Loadable>
                   }
                 </td>
@@ -108,8 +108,8 @@ const sortRows = (rows: Row[], index: number, reverse: Boolean) => {
     return [...rows].reverse();
   }
   const sortedRows = [...rows].sort((a, b) => {
-    const cellA = a.cells[index];
-    const cellB = b.cells[index];
+    const cellA = a.cells[index].value;
+    const cellB = b.cells[index].value;
     if (typeof cellB === 'string') {
       return cellB.localeCompare(cellA as string);
     }

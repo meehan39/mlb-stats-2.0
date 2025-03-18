@@ -8,7 +8,10 @@ export interface Row {
   cells: Cell[];
   link?: string;
 }
-export type Cell = number | string | JSX.Element;
+export interface Cell {
+  display: number | string | JSX.Element;
+  value: number | string;
+}
 export type Alignment = 'left' | 'right' | 'center';
 
 export interface TableProps {

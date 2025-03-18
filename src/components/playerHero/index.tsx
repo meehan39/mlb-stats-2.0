@@ -21,7 +21,7 @@ import {
 import { useAppSelector } from '../../store/hooks';
 import { selectTimeSpan } from '../../store/timeSpan/slice';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../ui/chart';
-import { Bar, BarChart, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, Rectangle, XAxis, YAxis } from 'recharts';
 
 import {
   Carousel,
@@ -122,7 +122,7 @@ function PlayerImage({
       className={`col-span-2 ${!xl && 'row-span-2'} w-full h-full pr-2 flex items-center justify-center`}>
       <Image
         src={
-          !isLoading && player
+          !isLoading && player?.playerId
             ? PATHS.PLAYER_HERO_IMAGE(player.playerId)
             : '/generic-avatar.png'
         }
@@ -215,6 +215,7 @@ export function MonthOverMonthHRs({ playerId }: { playerId?: number }) {
   ];
   const [getMonthOverMonthStats, { data, isLoading }] =
     useLazyGetMonthOverMonthStatsQuery();
+  const timeSpan = useAppSelector(selectTimeSpan);
 
   useEffect(() => {
     if (playerId) {
@@ -251,7 +252,24 @@ export function MonthOverMonthHRs({ playerId }: { playerId?: number }) {
             axisLine={false}
             label={{ value: 'HR', angle: -90, position: '' }}
           />
-          <Bar key={1} dataKey='homeRuns' radius={4} />
+          <Bar
+              dataKey="homeRuns"
+              strokeWidth={2}
+              fillOpacity={0.4}
+              radius={8}
+              activeIndex={parseInt(timeSpan) - 3}
+              activeBar={({ ...props }) => {
+                return (
+                  <Rectangle
+                    {...props}
+                    fillOpacity={1}
+                    stroke={'slate-500'}
+                    strokeDasharray={4}
+                    strokeDashoffset={4}
+                  />
+                )
+              }}
+            />
         </BarChart>
       </ChartContainer>
     </Loadable>
@@ -306,7 +324,7 @@ export function TodaysGame({
                   value: `${data.stats.hits ?? 0}-${data.stats.atBats ?? 0}`,
                 },
                 { label: 'BB', value: data.stats.baseOnBalls ?? 0 },
-                { label: 'K', value: data.stats.strikeOuts ?? 0 },
+                { label: 'SO', value: data.stats.strikeOuts ?? 0 },
                 { label: 'RBI', value: data.stats.rbi ?? 0 },
                 { label: 'R', value: data.stats.runs ?? 0 },
               ]}

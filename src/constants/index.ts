@@ -113,7 +113,7 @@ export const LEAGUE_DATA: LeagueData = {
     ],
   },
   meehan: {
-    teamName: 'Shmeez',
+    teamName: 'Shmeez 🧑‍💻',
     roster: [
       { name: 'Marcell Ozuna', id: 542303 },
       { name: 'Jose Ramirez', id: 608070 },

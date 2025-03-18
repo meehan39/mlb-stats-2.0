@@ -37,12 +37,12 @@ export default function Standings() {
           const { homeRuns, games, hits, atBats } = showTotal ? total : topFour;
           return {
             cells: [
-              ranking,
-              teamName,
-              homeRuns,
-              formatRate(homeRuns, games),
-              formatRate(homeRuns, hits),
-              formatRate(homeRuns, atBats),
+              {display: ranking, value: ranking},
+              {display: teamName, value: teamName},
+              {display: homeRuns, value: homeRuns},
+              {display: formatRate(homeRuns, games), value: (homeRuns / games)},
+              {display: formatRate(homeRuns, hits), value: (homeRuns / hits)},
+              {display: formatRate(homeRuns, atBats), value: (homeRuns / atBats)},
             ],
             link: `/team/${teamKey}`,
           };
