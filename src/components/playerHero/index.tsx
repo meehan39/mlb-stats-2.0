@@ -353,6 +353,7 @@ export function ScoreBugItem({
     <div className='flex justify-between'>
       <div className='flex items-center gap-2'>
         <Image
+          unoptimized
           src={PATHS.TEAM_LOGO(team.id)}
           alt={team.name ?? ''}
           width={40}

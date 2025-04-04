@@ -8,7 +8,7 @@ export async function GET(_: Request, props: { params: Promise<{ playerId: strin
   const monthKeys = Array.from(
     { length: new Date().getMonth() - 1 },
     (_, index) => (3 + index).toString() as TimeSpan,
-  ).reverse();
+  );
   const monthOverMonthStats = await Promise.all(
     monthKeys.map(async month => {
       const response = await getPlayerData(parseInt(playerId), month as TimeSpan);
