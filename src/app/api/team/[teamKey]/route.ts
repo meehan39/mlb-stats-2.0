@@ -5,11 +5,14 @@ import type { TeamKey, TimeSpan } from '../../../../constants/types';
 import type { GetTeamResponse } from './types';
 
 export const dynamic = 'force-dynamic';
-export async function GET(request: Request, props: { params: Promise<{ teamKey: TeamKey }> }) {
+export async function GET(
+  request: Request,
+  props: { params: Promise<{ teamKey: string }> },
+) {
   const params = await props.params;
   const timeSpan =
     (parseQueryString(request.url)?.timeSpan as TimeSpan) ?? 'season';
-  const roster = LEAGUE_DATA?.[params.teamKey].roster;
+  const roster = LEAGUE_DATA?.[params.teamKey as TeamKey]?.roster;
   if (!roster) {
     return new Response('Not found', { status: 404 });
   }
